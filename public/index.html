@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Meeting Room Booking</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div id="loginPage" class="container" style="max-width: 400px; margin-top: 100px;">
+    <h2>Login Admin</h2>
+    <div id="loginMessage"></div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@booking.com" value="admin@booking.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" value="admin123">
+    </div>
+    <button class="btn-primary" onclick="login()">Masuk</button>
+  </div>
+
+  <div id="dashboard" class="container hidden">
+    <h1>Admin Panel - Meeting Room Booking</h1>
+    <button class="btn-danger" style="float:right" onclick="logout()">Logout</button>
+    <nav>
+      <button id="tabRooms" class="active" onclick="showTab('rooms')">Ruangan</button>
+      <button id="tabUsers" onclick="showTab('users')">Users</button>
+      <button id="tabBookings" onclick="showTab('bookings')">Bookings</button>
+    </nav>
+
+    <!-- Ruangan Tab -->
+    <div id="contentRooms">
+      <h3>Daftar Ruangan</h3>
+      <button class="btn-success" onclick="showRoomForm()">+ Tambah Ruangan</button>
+      <div id="roomFormContainer" class="hidden" style="margin:15px 0; padding:15px; background:#f9f9f9; border-radius:5px;">
+        <h4 id="roomFormTitle">Tambah Ruangan</h4>
+        <input type="hidden" id="roomId">
+        <div class="form-group">
+          <label>Nama Ruangan</label>
+          <input type="text" id="roomName" placeholder="Nama ruangan">
+        </div>
+        <div class="form-group">
+          <label>Kapasitas</label>
+          <input type="number" id="roomCapacity" placeholder="Kapasitas">
+        </div>
+        <button class="btn-primary" onclick="saveRoom()">Simpan</button>
+        <button onclick="hideRoomForm()">Batal</button>
+      </div>
+      <table id="roomsTable">
+        <thead><tr><th>ID</th><th>Nama</th><th>Kapasitas</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Users Tab -->
+    <div id="contentUsers" class="hidden">
+      <h3>Daftar Users</h3>
+      <button class="btn-success" onclick="showUserForm()">+ Tambah User</button>
+      <div id="userFormContainer" class="hidden" style="margin:15px 0; padding:15px; background:#f9f9f9;">
+        <h4 id="userFormTitle">Tambah User</h4>
+        <input type="hidden" id="userId">
+        <div class="form-group"><label>Nama</label><input type="text" id="userName"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="userEmail"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="userPassword"></div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="userRole"><option value="customer">Customer</option><option value="admin">Admin</option></select>
+        </div>
+        <div class="form-group"><label>Phone</label><input type="text" id="userPhone"></div>
+        <button class="btn-primary" onclick="saveUser()">Simpan</button>
+        <button onclick="hideUserForm()">Batal</button>
+      </div>
+      <table id="usersTable">
+        <thead><tr><th>ID</th><th>Nama</th><th>Email</th><th>Role</th><th>Phone</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Bookings Tab -->
+    <div id="contentBookings" class="hidden">
+      <h3>Semua Booking</h3>
+      
+      <button class="btn-success" onclick="showBookingForm()" style="margin-bottom:15px;">+ Buat Booking</button>
+      <div id="bookingFormContainer" class="hidden" style="margin:15px 0; padding:15px; background:#f9f9f9; border-radius:5px;">
+        <h4>Form Booking</h4>
+        <div class="form-group">
+          <label>Customer</label>
+          <select id="bookingCustomer"></select>
+        </div>
+        <div class="form-group">
+          <label>Ruangan</label>
+          <select id="bookingRoom"></select>
+        </div>
+        <div class="form-group">
+          <label>Tanggal</label>
+          <input type="date" id="bookingDate">
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div class="form-group" style="flex:1;">
+            <label>Jam Mulai</label>
+            <input type="time" id="bookingStart">
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Jam Selesai</label>
+            <input type="time" id="bookingEnd">
+          </div>
+        </div>
+        <button class="btn-primary" onclick="saveBooking()">Simpan Booking</button>
+        <button onclick="hideBookingForm()">Batal</button>
+        <div id="bookingMessage" style="margin-top:10px;"></div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-bottom:15px;">
+        <input type="date" id="filterDate" style="width:200px;">
+        <select id="filterRoom" style="width:200px;"><option value="">Semua Ruangan</option></select>
+        <button class="btn-primary" onclick="loadBookings()">Filter</button>
+      </div>
+      <table id="bookingsTable">
+        <thead><tr><th>ID</th><th>Ruangan</th><th>Customer</th><th>Tanggal</th><th>Mulai</th><th>Selesai</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
