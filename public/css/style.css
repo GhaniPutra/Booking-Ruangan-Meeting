@@ -1,115 +1,422 @@
+/*
+  ==============================================
+  Style UI Modern Soft 2026
+  ==============================================
+  Dokumentasi dalam CSS ditulis dalam Bahasa Indonesia.
+  Tujuan: tampilan netral, lapang, profesional, dan mudah dibaca.
+*/
+
+/* Reset global agar semua browser tampil seragam */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+  box-sizing: border-box; /* Menggunakan box-sizing yang konsisten */
+  margin: 0; /* Hapus margin default browser */
+  padding: 0; /* Hapus padding default browser */
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif; /* Font sistem modern */
 }
 
+/* Variabel warna dan gaya global */
+:root {
+  --bg: #f4f5f9; /* Warna latar halaman utama */
+  --card: rgba(255, 255, 255, 0.94); /* Warna latar card */
+  --surface: #ffffff; /* Warna permukaan solid */
+  --text: #16202b; /* Warna teks utama */
+  --muted: #6b7280; /* Warna teks sekunder */
+  --border: rgba(15, 23, 42, 0.10); /* Warna border lembut */
+  --shadow: 0 18px 50px rgba(15, 23, 42, 0.08); /* Bayangan utama */
+  --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.05); /* Bayangan lembut */
+  --radius-lg: 24px; /* Radius besar */
+  --radius-md: 18px; /* Radius sedang */
+  --radius-sm: 14px; /* Radius kecil */
+  --primary-bg: rgba(79, 70, 229, 0.12); /* Warna tombol utama */
+  --primary-text: #4338ca; /* Warna teks tombol utama */
+  --success-bg: rgba(34, 197, 94, 0.14); /* Warna tombol sukses */
+  --success-text: #166534; /* Warna teks sukses */
+  --danger-bg: rgba(239, 68, 68, 0.14); /* Warna tombol bahaya */
+  --danger-text: #b91c1c; /* Warna teks bahaya */
+  --secondary-bg: rgba(255, 255, 255, 0.78); /* Warna tombol sekunder */
+  --secondary-text: #16202b; /* Warna teks sekunder */
+}
+
+/* Gaya halaman utama dan background */
 body {
-  background: #f4f6f9;
-  color: #333;
+  min-height: 100vh; /* Pastikan halaman memenuhi tinggi layar */
+  background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.12), transparent 34%),
+              radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.08), transparent 38%),
+              var(--bg); /* Kombinasi gradasi lembut */
+  color: var(--text); /* Warna teks utama */
+  line-height: 1.6; /* Jarak antar baris lebih nyaman */
 }
 
-.container {
-  max-width: 1000px;
-  margin: 20px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-h1, h2, h3 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-}
-
+/* Utility untuk menyembunyikan elemen */
 .hidden {
-  display: none !important;
+  display: none !important; /* Kelas ini digunakan oleh JS */
 }
 
-nav {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
+/* Kerangka aplikasi utama */
+.app-shell {
+  width: 100%; /* Lebar penuh layar */
+  margin: 0; /* Hapus margin auto */
+  padding: 26px 20px 38px; /* Jarak dalam page */
 }
 
-nav button {
-  padding: 10px 20px;
-  border: none;
-  background: #ecf0f1;
-  border-radius: 5px 5px 0 0;
-  cursor: pointer;
-  font-weight: bold;
+/* Panel login dan dashboard bersama */
+.auth-panel,
+.dashboard-panel {
+  width: 100%; /* Memenuhi lebar area konten */
+  background: var(--card); /* Latar card putih transparan */
+  border: 1px solid var(--border); /* Border lembut */
+  border-radius: var(--radius-lg); /* Radius tegas */
+  box-shadow: var(--shadow); /* Bayangan halus */
+  padding: 32px; /* Jarak dalam card */
 }
 
-nav button.active {
-  background: #3498db;
-  color: white;
+/* Spesifikasi panel login */
+.auth-panel {
+  margin-top: 76px; /* Jarak dari atas layar */
+  max-width: none; /* Hapus batas lebar */
 }
 
+/* Bagian judul dan deskripsi login */
+.auth-top {
+  margin-bottom: 28px; /* Jarak bawah header login */
+}
+
+.eyebrow {
+  margin-bottom: 10px; /* Jarak bawah label kecil */
+  font-size: 12px; /* Ukuran teks kecil */
+  letter-spacing: 0.18em; /* Spasi huruf */
+  text-transform: uppercase; /* Huruf kapital */
+  color: var(--muted); /* Warna teks sekunder */
+}
+
+.auth-copy,
+.dashboard-copy {
+  max-width: 640px; /* Lebar optimal teks deskripsi */
+  color: var(--muted); /* Warna teks sekunder */
+  font-size: 0.98rem; /* Ukuran teks paragraf */
+}
+
+/* Header dashboard */
+.dashboard-header {
+  display: flex; /* Baris fleksibel */
+  align-items: flex-start; /* Rata atas */
+  justify-content: space-between; /* Elemen berjauhan */
+  gap: 24px; /* Jarak antar elemen */
+  margin-bottom: 24px; /* Jarak bawah header */
+}
+
+.dashboard-header h1 {
+  margin-top: 2px; /* Perataan vertical */
+  font-size: 2rem; /* Ukuran judul besar */
+}
+
+/* Kartu ringkasan metrik dashboard */
+.dashboard-cards {
+  display: grid; /* Grid tiga kartu */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px; /* Jarak antar kartu */
+  margin-bottom: 26px; /* Jarak bawah ringkasan */
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.92); /* Card putih lembut */
+  border: 1px solid rgba(15, 23, 42, 0.08); /* Border halus */
+  border-radius: var(--radius-md); /* Radius menengah */
+  padding: 20px; /* Jarak dalam kartu */
+  box-shadow: var(--shadow-soft); /* Bayangan lembut */
+}
+
+.metric-label {
+  margin-bottom: 10px; /* Jarak label ke nilai */
+  font-size: 0.82rem; /* Ukuran label */
+  font-weight: 700; /* Tebal */
+  color: var(--muted); /* Warna sekunder */
+}
+
+.metric-value {
+  font-size: 2rem; /* Nilai besar */
+  font-weight: 800; /* Sangat tebal */
+  color: var(--text); /* Warna teks utama */
+}
+
+/* Layout judul setiap panel */
+.section-head {
+  display: flex; /* Baris fleksibel */
+  flex-wrap: wrap; /* Membungkus ketika sempit */
+  align-items: center; /* Rata tengah */
+  justify-content: space-between; /* Spasi antara judul/tombol */
+  gap: 16px; /* Jarak antar elemen */
+  margin-bottom: 16px; /* Jarak bawah */
+}
+
+.section-head h2 {
+  margin: 0; /* Hilangkan margin default */
+  font-size: 1.1rem; /* Ukuran judul section */
+}
+
+/* Tab bar modern */
+.tab-bar {
+  display: flex; /* Baris tombol */
+  flex-wrap: wrap; /* Wrap di layar kecil */
+  gap: 12px; /* Jarak antar tab */
+  margin-bottom: 22px; /* Jarak bawah tab */
+}
+
+.tab-bar button {
+  appearance: none; /* Hilangkan gaya browser */
+  border: 1px solid transparent; /* Border default */
+  padding: 10px 16px; /* Padding tab */
+  border-radius: 999px; /* Pill shape */
+  background: rgba(255, 255, 255, 0.88); /* Putihan lembut */
+  color: var(--muted); /* Warna teks sekunder */
+  font-weight: 700; /* Tebal */
+  cursor: pointer; /* Kursor pointer */
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.tab-bar button:hover {
+  transform: translateY(-1px); /* Hover ringan */
+  border-color: rgba(15, 23, 42, 0.10); /* Border halus */
+}
+
+.tab-bar button.active {
+  background: rgba(79, 70, 229, 0.14); /* Tab aktif berwarna */
+  color: var(--primary-text); /* Warna teks aktif */
+  border-color: rgba(79, 70, 229, 0.18); /* Border aktif */
+}
+
+/* Styling tabel modern */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
+  width: 100%; /* Lebar penuh */
+  border-collapse: separate; /* Border terpisah */
+  border-spacing: 0; /* Tanpa jarak antar sel */
+  background: rgba(255, 255, 255, 0.9); /* Backdrop putih */
+  border: 1px solid rgba(15, 23, 42, 0.08); /* Border luar */
+  border-radius: var(--radius-md); /* Radius tabel */
+  overflow: hidden; /* Round corners */
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
+th,
+td {
+  padding: 14px 16px; /* Spasi dalam sel */
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06); /* Garis antar baris */
+  text-align: left; /* Rata kiri */
+  vertical-align: middle; /* Vertikal tengah */
 }
 
 th {
-  background: #2c3e50;
-  color: white;
+  background: rgba(246, 247, 250, 0.94); /* Header lebih terang */
+  color: var(--muted); /* Warna teks header */
+  font-weight: 700; /* Tebal */
 }
 
+tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.96); /* Highlight baris hover */
+}
+
+tbody tr:last-child td {
+  border-bottom: none; /* Hilangkan border di baris terakhir */
+}
+
+/* Styling tombol global */
 button {
-  padding: 6px 12px;
-  margin: 0 3px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border: 1px solid transparent; /* Border default */
+  border-radius: 14px; /* Radius tombol */
+  padding: 11px 16px; /* Padding tombol */
+  font-weight: 700; /* Tebal */
+  cursor: pointer; /* Kursor pointer */
+  transition: transform 120ms ease, background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 }
 
-.btn-primary { background: #3498db; color: white; }
-.btn-warning { background: #f39c12; color: white; }
-.btn-danger  { background: #e74c3c; color: white; }
-.btn-success { background: #27ae60; color: white; }
+button:hover {
+  transform: translateY(-1px); /* Hover efek */
+}
 
+button:active {
+  transform: translateY(1px); /* Efek klik */
+}
+
+button:focus-visible {
+  outline: 4px solid rgba(79, 70, 229, 0.18); /* Outline fokus */
+  outline-offset: 2px; /* Jarak outline */
+}
+
+/* Variasi tombol khusus */
+.btn-primary {
+  background: var(--primary-bg); /* Latar utama */
+  color: var(--primary-text); /* Teks utama */
+  border-color: rgba(79, 70, 229, 0.18); /* Border tonal */
+}
+
+.btn-success {
+  background: var(--success-bg); /* Latar sukses */
+  color: var(--success-text); /* Teks sukses */
+  border-color: rgba(34, 197, 94, 0.22); /* Border sukses */
+}
+
+.btn-danger {
+  background: var(--danger-bg); /* Latar bahaya */
+  color: var(--danger-text); /* Teks bahaya */
+  border-color: rgba(239, 68, 68, 0.18); /* Border bahaya */
+}
+
+.btn-secondary {
+  background: var(--secondary-bg); /* Latar sekunder */
+  color: var(--secondary-text); /* Teks sekunder */
+  border-color: rgba(15, 23, 42, 0.10); /* Border sekunder */
+}
+
+.btn-wide {
+  width: 100%; /* Tombol full width */
+  max-width: 280px; /* Lebar maksimum */
+}
+
+/* Form input modern */
 .form-group {
-  margin-bottom: 12px;
+  margin-bottom: 18px; /* Jarak antar field */
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 4px;
-  font-weight: bold;
+  display: block; /* Label satu baris */
+  margin-bottom: 8px; /* Jarak ke input */
+  color: var(--muted); /* Warna label */
+  font-size: 0.9rem; /* Ukuran label */
+  font-weight: 700; /* Tebal */
 }
 
 .form-group input,
 .form-group select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 100%; /* Penuhi lebar */
+  padding: 14px 16px; /* Padding dalam */
+  border-radius: 16px; /* Radius input */
+  border: 1px solid rgba(15, 23, 42, 0.12); /* Border input */
+  background: rgba(255, 255, 255, 0.96); /* Latar putih */
+  color: var(--text); /* Teks input */
+  font-size: 0.96rem; /* Ukuran teks */
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
 }
 
+.form-group input::placeholder {
+  color: rgba(107, 114, 128, 0.7); /* Placeholder lembut */
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none; /* Hilangkan outline browser */
+  border-color: rgba(79, 70, 229, 0.28); /* Border fokus */
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12); /* Shadow fokus */
+  background: #ffffff; /* Latar fokus lebih cerah */
+}
+
+/* Pesan status error & success */
 .message {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 14px 16px; /* Padding pesan */
+  border-radius: 16px; /* Radius pesan */
+  border: 1px solid rgba(15, 23, 42, 0.10); /* Border pesan */
+  margin-top: 12px; /* Jarak atas */
+  font-weight: 700; /* Teks tebal */
 }
 
 .error {
-  background: #f8d7da;
-  color: #721c24;
+  background: rgba(239, 68, 68, 0.12); /* Latar error */
+  color: #991b1b; /* Teks error */
+  border-color: rgba(239, 68, 68, 0.22); /* Border error */
 }
 
 .success {
-  background: #d4edda;
-  color: #155724;
+  background: rgba(34, 197, 94, 0.14); /* Latar sukses */
+  color: #166534; /* Teks sukses */
+  border-color: rgba(34, 197, 94, 0.22); /* Border sukses */
 }
+
+/* Card form inline */
+.form-card {
+  background: var(--surface); /* Latar white */
+  border: 1px solid rgba(15, 23, 42, 0.08); /* Border card */
+  border-radius: var(--radius-md); /* Radius card */
+  padding: 24px; /* Padding card */
+  box-shadow: var(--shadow-soft); /* Bayangan lembut */
+  margin-bottom: 20px; /* Jarak bawah card */
+}
+
+.form-card h3 {
+  margin-top: 0; /* Hilangkan margin atas judul */
+  margin-bottom: 18px; /* Jarak judul ke konten */
+}
+
+.form-actions {
+  display: flex; /* Layout horizontal */
+  flex-wrap: wrap; /* Wrap jika sempit */
+  gap: 12px; /* Jarak antar tombol */
+  margin-top: 8px; /* Jarak atas */
+}
+
+.filters {
+  display: grid; /* Grid filter */
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
+  gap: 16px; /* Jarak antar field */
+  margin: 20px 0 14px; /* Jarak vertikal */
+}
+
+.filter-actions {
+  display: flex; /* Flex untuk tombol filter */
+  align-items: flex-end; /* Rata bawah */
+  justify-content: flex-end; /* Tepi kanan */
+}
+
+.booking-grid {
+  display: grid; /* Grid booking form */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px; /* Jarak antar field */
+}
+
+.full-width {
+  grid-column: 1 / -1; /* Elemen lebar penuh */
+}
+
+.booking-message {
+  margin-top: 18px; /* Jarak pesan */
+}
+
+/* Responsif untuk tablet */
+@media (max-width: 960px) {
+  .dashboard-cards,
+  .filters,
+  .booking-grid {
+    grid-template-columns: 1fr; /* Satu kolom */
+  }
+}
+
+/* Responsif untuk mobile */
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 18px 14px 24px; /* Kurangi padding */
+  }
+
+  .auth-panel,
+  .dashboard-panel {
+    padding: 24px; /* Kurangi padding card */
+  }
+
+  .dashboard-header {
+    flex-direction: column; /* Header kolom */
+    align-items: stretch; /* Lebar penuh */
+  }
+
+  .tab-bar,
+  .section-head,
+  .form-actions {
+    flex-direction: column; /* Kolom di layar kecil */
+    align-items: stretch; /* Penuhi lebar */
+  }
+
+  button {
+    width: 100%; /* Tombol full width */
+  }
+
+  table {
+    font-size: 0.94rem; /* Ukuran teks lebih kecil */
+  }
+}
+
+

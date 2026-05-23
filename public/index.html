@@ -1,129 +1,270 @@
+<!--
+  ==============================================
+  UI Admin Panel Booking Ruangan - Modern 2026
+  ==============================================
+  Dokumentasi setiap bagian ditulis dalam Bahasa Indonesia.
+  Desain terbaru menggunakan palet netral soft, layout yang lapang,
+  dan gaya tipografi modern agar tampak profesional dan siap produksi.
+-->
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <!-- Encoding karakter UTF-8 agar teks Indonesia tampil benar -->
   <meta charset="UTF-8">
+  <!-- Responsive: membuat layout menyesuaikan layar perangkat -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - Meeting Room Booking</title>
+  <!-- Judul halaman admin -->
+  <title>Meeting Room Booking - Admin</title>
+  <!-- Menghubungkan stylesheet utama -->
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div id="loginPage" class="container" style="max-width: 400px; margin-top: 100px;">
-    <h2>Login Admin</h2>
-    <div id="loginMessage"></div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="admin@booking.com" value="admin@booking.com">
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="loginPassword" value="admin123">
-    </div>
-    <button class="btn-primary" onclick="login()">Masuk</button>
-  </div>
+  <!-- Kerangka utama aplikasi -->
+  <main class="app-shell">
 
-  <div id="dashboard" class="container hidden">
-    <h1>Admin Panel - Meeting Room Booking</h1>
-    <button class="btn-danger" style="float:right" onclick="logout()">Logout</button>
-    <nav>
-      <button id="tabRooms" class="active" onclick="showTab('rooms')">Ruangan</button>
-      <button id="tabUsers" onclick="showTab('users')">Users</button>
-      <button id="tabBookings" onclick="showTab('bookings')">Bookings</button>
-    </nav>
-
-    <!-- Ruangan Tab -->
-    <div id="contentRooms">
-      <h3>Daftar Ruangan</h3>
-      <button class="btn-success" onclick="showRoomForm()">+ Tambah Ruangan</button>
-      <div id="roomFormContainer" class="hidden" style="margin:15px 0; padding:15px; background:#f9f9f9; border-radius:5px;">
-        <h4 id="roomFormTitle">Tambah Ruangan</h4>
-        <input type="hidden" id="roomId">
-        <div class="form-group">
-          <label>Nama Ruangan</label>
-          <input type="text" id="roomName" placeholder="Nama ruangan">
-        </div>
-        <div class="form-group">
-          <label>Kapasitas</label>
-          <input type="number" id="roomCapacity" placeholder="Kapasitas">
-        </div>
-        <button class="btn-primary" onclick="saveRoom()">Simpan</button>
-        <button onclick="hideRoomForm()">Batal</button>
+    <!-- Panel login admin -->
+    <section id="loginPage" class="auth-panel" aria-live="polite">
+      <!-- Judul dan deskripsi singkat -->
+      <div class="auth-top">
+        <p class="eyebrow">Portal Admin</p>
+        <h2>Selamat Datang</h2>
+        <p class="auth-copy">Masuk untuk mengelola ruangan dan booking dengan tampilan profesional yang bersih.</p>
       </div>
-      <table id="roomsTable">
-        <thead><tr><th>ID</th><th>Nama</th><th>Kapasitas</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
 
-    <!-- Users Tab -->
-    <div id="contentUsers" class="hidden">
-      <h3>Daftar Users</h3>
-      <button class="btn-success" onclick="showUserForm()">+ Tambah User</button>
-      <div id="userFormContainer" class="hidden" style="margin:15px 0; padding:15px; background:#f9f9f9;">
-        <h4 id="userFormTitle">Tambah User</h4>
-        <input type="hidden" id="userId">
-        <div class="form-group"><label>Nama</label><input type="text" id="userName"></div>
-        <div class="form-group"><label>Email</label><input type="email" id="userEmail"></div>
-        <div class="form-group"><label>Password</label><input type="password" id="userPassword"></div>
-        <div class="form-group">
-          <label>Role</label>
-          <select id="userRole"><option value="customer">Customer</option><option value="admin">Admin</option></select>
-        </div>
-        <div class="form-group"><label>Phone</label><input type="text" id="userPhone"></div>
-        <button class="btn-primary" onclick="saveUser()">Simpan</button>
-        <button onclick="hideUserForm()">Batal</button>
+      <!-- Pesan login akan ditampilkan di sini oleh JavaScript -->
+      <div id="loginMessage"></div>
+
+      <!-- Form input email -->
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="admin@booking.com"
+          value="admin@booking.com"
+          autocomplete="username"
+        >
       </div>
-      <table id="usersTable">
-        <thead><tr><th>ID</th><th>Nama</th><th>Email</th><th>Role</th><th>Phone</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
 
-    <!-- Bookings Tab -->
-    <div id="contentBookings" class="hidden">
-      <h3>Semua Booking</h3>
-      
-      <button class="btn-success" onclick="showBookingForm()" style="margin-bottom:15px;">+ Buat Booking</button>
-      <div id="bookingFormContainer" class="hidden" style="margin:15px 0; padding:15px; background:#f9f9f9; border-radius:5px;">
-        <h4>Form Booking</h4>
-        <div class="form-group">
-          <label>Customer</label>
-          <select id="bookingCustomer"></select>
+      <!-- Form input password -->
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input
+          type="password"
+          id="loginPassword"
+          value="admin123"
+          autocomplete="current-password"
+        >
+      </div>
+
+      <!-- Tombol login memicu fungsi JavaScript login() -->
+      <button class="btn-primary btn-wide" onclick="login()" type="button">Masuk</button>
+    </section>
+
+    <!-- Panel dashboard utama, tersembunyi sampai login berhasil -->
+    <section id="dashboard" class="dashboard-panel hidden" role="application">
+
+      <!-- Header dashboard dengan judul dan tombol logout -->
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">Dashboard Operasional</p>
+          <h1>Meeting Room Booking</h1>
+          <p class="dashboard-copy">Kelola ruangan, pengguna, dan booking dalam satu tampilan modern dan mudah digunakan.</p>
         </div>
-        <div class="form-group">
-          <label>Ruangan</label>
-          <select id="bookingRoom"></select>
+        <button class="btn-danger" onclick="logout()" type="button" aria-label="Logout">Logout</button>
+      </header>
+
+      <!-- Ringkasan metrik cepat untuk memberi konteks dashboard -->
+      <div class="dashboard-cards">
+        <article class="metric-card">
+          <p class="metric-label">Total Ruangan</p>
+          <p class="metric-value">--</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Total Users</p>
+          <p class="metric-value">--</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Booking Aktif</p>
+          <p class="metric-value">--</p>
+        </article>
+      </div>
+
+      <!-- Navigasi tab modern untuk berpindah antar bagian -->
+      <nav class="tab-bar" aria-label="Navigasi tab">
+        <button id="tabRooms" class="active" onclick="showTab('rooms')" type="button">Ruangan</button>
+        <button id="tabUsers" onclick="showTab('users')" type="button">Users</button>
+        <button id="tabBookings" onclick="showTab('bookings')" type="button">Bookings</button>
+      </nav>
+
+      <!-- Bagian daftar ruangan -->
+      <section id="contentRooms" class="tab-content" aria-label="Tab Ruangan">
+        <div class="section-head">
+          <h2>Daftar Ruangan</h2>
+          <button class="btn-success" onclick="showRoomForm()" type="button">+ Tambah Ruangan</button>
         </div>
-        <div class="form-group">
-          <label>Tanggal</label>
-          <input type="date" id="bookingDate">
-        </div>
-        <div style="display:flex; gap:10px;">
-          <div class="form-group" style="flex:1;">
-            <label>Jam Mulai</label>
-            <input type="time" id="bookingStart">
+
+        <!-- Form tambah/edit ruangan, modal-like card -->
+        <div id="roomFormContainer" class="form-card hidden">
+          <h3 id="roomFormTitle">Tambah Ruangan</h3>
+          <input type="hidden" id="roomId">
+          <div class="form-group">
+            <label for="roomName">Nama Ruangan</label>
+            <input type="text" id="roomName" placeholder="Contoh: Ruang Presentasi A">
           </div>
-          <div class="form-group" style="flex:1;">
-            <label>Jam Selesai</label>
-            <input type="time" id="bookingEnd">
+          <div class="form-group">
+            <label for="roomCapacity">Kapasitas</label>
+            <input type="number" id="roomCapacity" placeholder="Contoh: 10">
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" onclick="saveRoom()" type="button">Simpan</button>
+            <button class="btn-secondary" onclick="hideRoomForm()" type="button">Batal</button>
           </div>
         </div>
-        <button class="btn-primary" onclick="saveBooking()">Simpan Booking</button>
-        <button onclick="hideBookingForm()">Batal</button>
-        <div id="bookingMessage" style="margin-top:10px;"></div>
-      </div>
 
-      <div style="display:flex; gap:10px; margin-bottom:15px;">
-        <input type="date" id="filterDate" style="width:200px;">
-        <select id="filterRoom" style="width:200px;"><option value="">Semua Ruangan</option></select>
-        <button class="btn-primary" onclick="loadBookings()">Filter</button>
-      </div>
-      <table id="bookingsTable">
-        <thead><tr><th>ID</th><th>Ruangan</th><th>Customer</th><th>Tanggal</th><th>Mulai</th><th>Selesai</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
+        <table id="roomsTable" aria-label="Tabel Ruangan">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama</th>
+              <th>Kapasitas</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
 
+      <!-- Bagian daftar users -->
+      <section id="contentUsers" class="tab-content hidden" aria-label="Tab Users">
+        <div class="section-head">
+          <h2>Daftar Users</h2>
+          <button class="btn-success" onclick="showUserForm()" type="button">+ Tambah User</button>
+        </div>
+
+        <div id="userFormContainer" class="form-card hidden">
+          <h3 id="userFormTitle">Tambah User</h3>
+          <input type="hidden" id="userId">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="userName">Nama</label>
+              <input type="text" id="userName" placeholder="Nama lengkap">
+            </div>
+            <div class="form-group">
+              <label for="userEmail">Email</label>
+              <input type="email" id="userEmail" placeholder="user@contoh.com">
+            </div>
+            <div class="form-group">
+              <label for="userPassword">Password</label>
+              <input type="password" id="userPassword" placeholder="Minimal 8 karakter">
+            </div>
+            <div class="form-group">
+              <label for="userRole">Role</label>
+              <select id="userRole">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="userPhone">Phone</label>
+              <input type="text" id="userPhone" placeholder="0812xxxxxxx">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" onclick="saveUser()" type="button">Simpan</button>
+            <button class="btn-secondary" onclick="hideUserForm()" type="button">Batal</button>
+          </div>
+        </div>
+
+        <table id="usersTable" aria-label="Tabel Users">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Phone</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- Bagian daftar booking -->
+      <section id="contentBookings" class="tab-content hidden" aria-label="Tab Bookings">
+        <div class="section-head">
+          <h2>Semua Booking</h2>
+          <button class="btn-success" onclick="showBookingForm()" type="button">+ Buat Booking</button>
+        </div>
+
+        <div id="bookingFormContainer" class="form-card hidden">
+          <h3>Form Booking</h3>
+          <div class="form-grid booking-grid">
+            <div class="form-group">
+              <label for="bookingCustomer">Customer</label>
+              <select id="bookingCustomer"></select>
+            </div>
+            <div class="form-group">
+              <label for="bookingRoom">Ruangan</label>
+              <select id="bookingRoom"></select>
+            </div>
+            <div class="form-group full-width">
+              <label for="bookingDate">Tanggal</label>
+              <input type="date" id="bookingDate">
+            </div>
+            <div class="form-group">
+              <label for="bookingStart">Jam Mulai</label>
+              <input type="time" id="bookingStart">
+            </div>
+            <div class="form-group">
+              <label for="bookingEnd">Jam Selesai</label>
+              <input type="time" id="bookingEnd">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" onclick="saveBooking()" type="button">Simpan Booking</button>
+            <button class="btn-secondary" onclick="hideBookingForm()" type="button">Batal</button>
+          </div>
+          <div id="bookingMessage" class="booking-message" aria-live="polite"></div>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filter Booking">
+          <div class="form-group">
+            <label for="filterDate">Tanggal</label>
+            <input type="date" id="filterDate">
+          </div>
+          <div class="form-group">
+            <label for="filterRoom">Ruangan</label>
+            <select id="filterRoom">
+              <option value="">Semua Ruangan</option>
+            </select>
+          </div>
+          <div class="filter-actions">
+            <button class="btn-primary" onclick="loadBookings()" type="button">Filter</button>
+          </div>
+        </div>
+
+        <table id="bookingsTable" aria-label="Tabel Bookings">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ruangan</th>
+              <th>Customer</th>
+              <th>Tanggal</th>
+              <th>Mulai</th>
+              <th>Selesai</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </section>
+  </main>
+
+  <!-- Skrip admin untuk logika autentikasi dan CRUD -->
   <script src="/js/admin.js"></script>
 </body>
 </html>
+
