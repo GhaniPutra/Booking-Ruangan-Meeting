@@ -14,6 +14,9 @@ async function migrate() {
 
   await connection.query(`USE \`${process.env.DB_NAME}\``);
 
+  await connection.query(`DROP TABLE IF EXISTS bookings, rooms, users`);
+  console.log('Tabel lama dibersihkan.');
+
   // Buat tabel users
   await connection.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -50,6 +53,7 @@ async function migrate() {
       date DATE NOT NULL,
       start_time TIME NOT NULL,
       end_time TIME NOT NULL,
+      status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,

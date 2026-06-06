@@ -50,19 +50,19 @@ async function seed() {
     // ID user: 1=admin, 2=budi, 3=siti, 4=andi
     // ID room: 1=Anggrek, 2=Mawar, 3=Melati, 4=Aula, 5=Kenanga
     const bookings = [
-      [1, 2, '2026-05-25', '09:00', '10:00'], // Anggrek, Budi
-      [2, 3, '2026-05-25', '10:00', '12:00'], // Mawar, Siti
-      [3, 4, '2026-05-26', '08:00', '09:00'], // Melati, Andi
-      [4, 2, '2026-05-26', '13:00', '15:00'], // Aula, Budi
-      [1, 3, '2026-05-27', '09:00', '11:00'], // Anggrek, Siti
-      [5, 4, '2026-05-27', '14:00', '16:00'], // Kenanga, Andi
-      [2, 2, '2026-05-28', '08:00', '10:00'], // Mawar, Budi
-      [1, 3, '2026-05-28', '10:00', '11:00'], // Anggrek, Siti (berbeda jam, tidak bentrok)
+      [1, 2, '2026-06-06', '09:00', '10:00', 'approved'], // Anggrek, Budi
+      [2, 3, '2026-06-06', '10:00', '12:00', 'approved'], // Mawar, Siti
+      [3, 4, '2026-06-06', '08:00', '09:00', 'approved'], // Melati, Andi
+      [4, 2, '2026-06-07', '13:00', '15:00', 'pending'],  // Aula, Budi
+      [1, 3, '2026-06-07', '09:00', '11:00', 'pending'],  // Anggrek, Siti
+      [5, 4, '2026-06-07', '14:00', '16:00', 'rejected'], // Kenanga, Andi
+      [2, 2, '2026-06-08', '08:00', '10:00', 'approved'], // Mawar, Budi
+      [1, 3, '2026-06-08', '10:00', '11:00', 'approved'], // Anggrek, Siti
     ];
 
     for (const b of bookings) {
       await connection.query(
-        'INSERT INTO bookings (room_id, user_id, date, start_time, end_time) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO bookings (room_id, user_id, date, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?)',
         b
       );
     }

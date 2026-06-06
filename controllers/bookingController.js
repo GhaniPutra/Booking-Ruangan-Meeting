@@ -5,15 +5,17 @@ const userModel = require('../models/user');
 async function list(req, res) {
   try {
     const filters = {};
-    // Admin bisa filter apapun, customer hanya melihat miliknya
+    if (req.query.room_id) filters.room_id = req.query.room_id;
+    if (req.query.date) filters.date = req.query.date;
+
     if (req.user.role === 'customer') {
-      filters.user_id = req.user.id;
+      if (req.query.my_bookings === 'true' || req.query.user_id) {
+        filters.user_id = req.user.id;
+      }
     } else {
-      // Admin bisa gunakan query param
-      if (req.query.room_id) filters.room_id = req.query.room_id;
-      if (req.query.date) filters.date = req.query.date;
       if (req.query.user_id) filters.user_id = req.query.user_id;
     }
+
     const bookings = await bookingModel.findAll(filters);
     res.json(bookings);
   } catch (error) {
@@ -137,4 +139,22 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { list, detail, create, update, remove };
+async function updateStatus(req, res) {
+  try {
+    const { status } = req.body;
+    if (!status || !['pending', 'approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ message: 'Status tidak valid' });
+    }
+
+    const booking = await bookingModel.findById(req.params.id);
+    if (!booking) return res.status(404).json({ message: 'Booking tidak ditemukan' });
+
+    await bookingModel.updateStatus(req.params.id, status);
+    res.json({ message: `Status booking berhasil diubah menjadi ${status}` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Gagal mengubah status booking' });
+  }
+}
+
+module.exports = { list, detail, create, update, updateStatus, remove };

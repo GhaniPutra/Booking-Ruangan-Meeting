@@ -72,8 +72,12 @@ async function update(id, { room_id, date, start_time, end_time }) {
   );
 }
 
+async function updateStatus(id, status) {
+  await pool.query('UPDATE bookings SET status = ? WHERE id = ?', [status, id]);
+}
+
 async function remove(id) {
   await pool.query('DELETE FROM bookings WHERE id = ?', [id]);
 }
 
-module.exports = { findAll, findById, isConflict, create, update, remove };
+module.exports = { findAll, findById, isConflict, create, update, updateStatus, remove };
