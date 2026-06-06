@@ -1,270 +1,765 @@
-<!--
-  ==============================================
-  UI Admin Panel Booking Ruangan - Modern 2026
-  ==============================================
-  Dokumentasi setiap bagian ditulis dalam Bahasa Indonesia.
-  Desain terbaru menggunakan palet netral soft, layout yang lapang,
-  dan gaya tipografi modern agar tampak profesional dan siap produksi.
--->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <!-- Encoding karakter UTF-8 agar teks Indonesia tampil benar -->
   <meta charset="UTF-8">
-  <!-- Responsive: membuat layout menyesuaikan layar perangkat -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Judul halaman admin -->
-  <title>Meeting Room Booking - Admin</title>
-  <!-- Menghubungkan stylesheet utama -->
+  <title>RoomBook - Pemesanan Ruang Rapat Instan & Premium</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <!-- Kerangka utama aplikasi -->
-  <main class="app-shell">
 
-    <!-- Panel login admin -->
-    <section id="loginPage" class="auth-panel" aria-live="polite">
-      <!-- Judul dan deskripsi singkat -->
-      <div class="auth-top">
-        <p class="eyebrow">Portal Admin</p>
-        <h2>Selamat Datang</h2>
-        <p class="auth-copy">Masuk untuk mengelola ruangan dan booking dengan tampilan profesional yang bersih.</p>
+  <!-- Background Blur Circles (Liquid Glass Background) -->
+  <div class="bg-decorations">
+    <div class="blur-circle circle-1"></div>
+    <div class="blur-circle circle-2"></div>
+    <div class="blur-circle circle-3"></div>
+  </div>
+
+  <!-- ==========================================================================
+     1. FLOATING NAVIGATION BAR
+     ========================================================================== -->
+  <header class="navbar" id="floatingNavbar">
+    <a href="#" class="brand" onclick="navigateTo('landing')">
+      <!-- Icon Logo: Custom RoomBook SVG -->
+      <svg class="brand-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+        <path d="M9 10h6m-6 4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="17" cy="17" r="2" fill="currentColor"/>
+      </svg>
+      <span>RoomBook</span>
+    </a>
+    
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#hero" class="nav-link">Beranda</a></li>
+        <li><a href="#rooms-preview" class="nav-link">Ruangan</a></li>
+        <li><a href="#features" class="nav-link">Fitur</a></li>
+        <li><a href="#how-to-book" class="nav-link">Alur Booking</a></li>
+      </ul>
+    </nav>
+    
+    <div class="nav-buttons">
+      <button class="btn btn-nav btn-nav-login" onclick="showAuthPage('login')">Masuk</button>
+      <button class="btn btn-nav btn-nav-register" onclick="showAuthPage('register')">Daftar</button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+     2. LANDING PAGE VIEW
+     ========================================================================== -->
+  <div id="landingPageView">
+    <!-- Hero Section -->
+    <section class="landing-section hero-section" id="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <!-- Calendar Icon -->
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Pemesanan Meeting Room Real-Time</span>
+        </div>
+        <h1>Pemesanan Ruangan Meeting <span>Lebih Praktis</span></h1>
+        <p class="hero-description">
+          Tingkatkan produktivitas kolaborasi tim Anda dengan ruangan meeting premium yang nyaman, modern, dan dilengkapi fasilitas berteknologi tinggi. Pesan ruang rapat instan sekarang juga.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-accent" onclick="showAuthPage('register')">Daftar Sekarang</button>
+          <button class="btn btn-secondary" onclick="scrollToId('rooms-preview')">Lihat Ruangan</button>
+        </div>
       </div>
-
-      <!-- Pesan login akan ditampilkan di sini oleh JavaScript -->
-      <div id="loginMessage"></div>
-
-      <!-- Form input email -->
-      <div class="form-group">
-        <label for="loginEmail">Email</label>
-        <input
-          type="email"
-          id="loginEmail"
-          placeholder="admin@booking.com"
-          value="admin@booking.com"
-          autocomplete="username"
-        >
+      
+      <div class="hero-visual">
+        <div class="glass-box-card hero-mockup-card">
+          <h3 style="margin-bottom: 16px;">Kapasitas Ruang Hari Ini</h3>
+          <div class="mock-stat">
+            <span class="mock-label">Ruang Anggrek</span>
+            <span class="badge badge-approved">Tersedia</span>
+          </div>
+          <div class="mock-stat">
+            <span class="mock-label">Ruang Mawar</span>
+            <span class="badge badge-pending">Sedang Digunakan</span>
+          </div>
+          <div class="mock-stat">
+            <span class="mock-label">Aula Serbaguna</span>
+            <span class="badge badge-approved">Tersedia</span>
+          </div>
+        </div>
       </div>
-
-      <!-- Form input password -->
-      <div class="form-group">
-        <label for="loginPassword">Password</label>
-        <input
-          type="password"
-          id="loginPassword"
-          value="admin123"
-          autocomplete="current-password"
-        >
-      </div>
-
-      <!-- Tombol login memicu fungsi JavaScript login() -->
-      <button class="btn-primary btn-wide" onclick="login()" type="button">Masuk</button>
     </section>
 
-    <!-- Panel dashboard utama, tersembunyi sampai login berhasil -->
-    <section id="dashboard" class="dashboard-panel hidden" role="application">
-
-      <!-- Header dashboard dengan judul dan tombol logout -->
-      <header class="dashboard-header">
-        <div>
-          <p class="eyebrow">Dashboard Operasional</p>
-          <h1>Meeting Room Booking</h1>
-          <p class="dashboard-copy">Kelola ruangan, pengguna, dan booking dalam satu tampilan modern dan mudah digunakan.</p>
-        </div>
-        <button class="btn-danger" onclick="logout()" type="button" aria-label="Logout">Logout</button>
-      </header>
-
-      <!-- Ringkasan metrik cepat untuk memberi konteks dashboard -->
-      <div class="dashboard-cards">
-        <article class="metric-card">
-          <p class="metric-label">Total Ruangan</p>
-          <p class="metric-value">--</p>
-        </article>
-        <article class="metric-card">
-          <p class="metric-label">Total Users</p>
-          <p class="metric-value">--</p>
-        </article>
-        <article class="metric-card">
-          <p class="metric-label">Booking Aktif</p>
-          <p class="metric-value">--</p>
-        </article>
+    <!-- Rooms Catalog Section -->
+    <section class="landing-section" id="rooms-preview">
+      <div class="section-title-wrap">
+        <span class="section-subtitle">Katalog Meeting Room</span>
+        <h2 class="section-title">Pilih Ruangan Sesuai Kebutuhan</h2>
       </div>
-
-      <!-- Navigasi tab modern untuk berpindah antar bagian -->
-      <nav class="tab-bar" aria-label="Navigasi tab">
-        <button id="tabRooms" class="active" onclick="showTab('rooms')" type="button">Ruangan</button>
-        <button id="tabUsers" onclick="showTab('users')" type="button">Users</button>
-        <button id="tabBookings" onclick="showTab('bookings')" type="button">Bookings</button>
-      </nav>
-
-      <!-- Bagian daftar ruangan -->
-      <section id="contentRooms" class="tab-content" aria-label="Tab Ruangan">
-        <div class="section-head">
-          <h2>Daftar Ruangan</h2>
-          <button class="btn-success" onclick="showRoomForm()" type="button">+ Tambah Ruangan</button>
+      
+      <div class="rooms-preview-grid">
+        <!-- Room 1: Anggrek -->
+        <div class="glass-box-card room-preview-card">
+          <div class="room-preview-image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="room-preview-badge">Kapasitas 10 Pax</span>
+          </div>
+          <div class="room-preview-info">
+            <h3>Ruang Anggrek</h3>
+            <div class="room-meta">
+              <div class="room-meta-item">
+                <!-- TV/Monitor Icon -->
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <span>Fasilitas TV 4K</span>
+              </div>
+            </div>
+            <div class="room-amenities">
+              <span class="amenity-tag">Ultra High-Speed Wifi</span>
+              <span class="amenity-tag">Glass Whiteboard</span>
+              <span class="amenity-tag">Air Conditioner</span>
+            </div>
+            <button class="btn btn-primary btn-nav" style="width: 100%;" onclick="showAuthPage('login')">Pesan Sekarang</button>
+          </div>
         </div>
 
-        <!-- Form tambah/edit ruangan, modal-like card -->
-        <div id="roomFormContainer" class="form-card hidden">
-          <h3 id="roomFormTitle">Tambah Ruangan</h3>
-          <input type="hidden" id="roomId">
+        <!-- Room 2: Mawar -->
+        <div class="glass-box-card room-preview-card">
+          <div class="room-preview-image" style="background: linear-gradient(135deg, #1e3a8a 0%, #a855f7 100%);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="room-preview-badge">Kapasitas 20 Pax</span>
+          </div>
+          <div class="room-preview-info">
+            <h3>Ruang Mawar</h3>
+            <div class="room-meta">
+              <div class="room-meta-item">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <span>Projector & Sound</span>
+              </div>
+            </div>
+            <div class="room-amenities">
+              <span class="amenity-tag">Proyektor HD</span>
+              <span class="amenity-tag">Mic & Speakers</span>
+              <span class="amenity-tag">Broadband Wifi</span>
+            </div>
+            <button class="btn btn-primary btn-nav" style="width: 100%;" onclick="showAuthPage('login')">Pesan Sekarang</button>
+          </div>
+        </div>
+
+        <!-- Room 3: Aula Serbaguna -->
+        <div class="glass-box-card room-preview-card">
+          <div class="room-preview-image" style="background: linear-gradient(135deg, #4338ca 0%, #10b981 100%);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span class="room-preview-badge">Kapasitas 50 Pax</span>
+          </div>
+          <div class="room-preview-info">
+            <h3>Aula Serbaguna</h3>
+            <div class="room-meta">
+              <div class="room-meta-item">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                <span>Fasilitas Event Lengkap</span>
+              </div>
+            </div>
+            <div class="room-amenities">
+              <span class="amenity-tag">Stage</span>
+              <span class="amenity-tag">Professional Audio</span>
+              <span class="amenity-tag">Catering Area</span>
+            </div>
+            <button class="btn btn-primary btn-nav" style="width: 100%;" onclick="showAuthPage('login')">Pesan Sekarang</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="landing-section" id="features">
+      <div class="section-title-wrap">
+        <span class="section-subtitle">Keunggulan Layanan</span>
+        <h2 class="section-title">Mengapa Memilih RoomBook?</h2>
+      </div>
+      
+      <div class="features-grid">
+        <div class="glass-box-card feature-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>Pemesanan Cepat</h3>
+          <p>Proses pemesanan selesai kurang dari 2 menit. Cukup tentukan tanggal, jam, dan ruangan rapat yang diinginkan.</p>
+        </div>
+
+        <div class="glass-box-card feature-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Fasilitas Terjamin</h3>
+          <p>Seluruh ruang rapat dilengkapi infrastruktur premium: AC dingin, internet fiber optic, smart TV, dan whiteboard kaca.</p>
+        </div>
+
+        <div class="glass-box-card feature-card">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Laporan Real-Time</h3>
+          <p>Lacak jadwal rapat, status persetujuan booking, serta riwayat reservasi Anda secara transparan di dashboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Book Section -->
+    <section class="landing-section" id="how-to-book">
+      <div class="section-title-wrap">
+        <span class="section-subtitle">Alur Pemesanan</span>
+        <h2 class="section-title">Langkah Mudah Booking Ruangan</h2>
+      </div>
+      
+      <div class="steps-grid">
+        <div class="glass-box-card step-card">
+          <div class="step-number">01</div>
+          <h3>Masuk Portal</h3>
+          <p>Daftarkan akun customer baru secara gratis atau masuk menggunakan email dan sandi Anda yang terdaftar.</p>
+        </div>
+
+        <div class="glass-box-card step-card">
+          <div class="step-number">02</div>
+          <h3>Pilih Ruang & Waktu</h3>
+          <p>Pilih meeting room yang sesuai dengan kapasitas agenda Anda, lalu pilih tanggal serta durasi jam peminjaman.</p>
+        </div>
+
+        <div class="glass-box-card step-card">
+          <div class="step-number">03</div>
+          <h3>Pantau Status</h3>
+          <p>Lacak pengajuan booking Anda langsung dari dashboard. Status (Menunggu/Disetujui/Ditolak) terupdate secara real-time.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 RoomBook Inc. Hak Cipta Dilindungi Undang-Undang.</p>
+    </footer>
+  </div>
+
+
+  <!-- ==========================================================================
+     3. AUTHENTICATION PAGE (REDESIGNED LOGIN & REGISTER)
+     ========================================================================== -->
+  <div id="authPageView" class="hidden">
+    <div class="auth-wrapper">
+      <div class="glass-box-card auth-container">
+        
+        <div class="auth-header-logo">
+          <div class="brand">
+            <svg class="brand-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M9 10h6m-6 4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="17" cy="17" r="2" fill="currentColor"/>
+            </svg>
+            <span>RoomBook</span>
+          </div>
+          <h2 class="auth-title" id="authFormTitle">Selamat Datang</h2>
+          <p class="auth-subtitle" id="authFormSubtitle">Masuk ke portal Anda untuk memesan atau mengelola ruangan.</p>
+        </div>
+
+        <!-- Notification container -->
+        <div id="authMessage"></div>
+
+        <!-- Slide Tabs Toggle -->
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tabLoginBtn" onclick="toggleAuthTab('login')">Masuk</button>
+          <button class="auth-tab-btn" id="tabRegisterBtn" onclick="toggleAuthTab('register')">Daftar</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
           <div class="form-group">
-            <label for="roomName">Nama Ruangan</label>
-            <input type="text" id="roomName" placeholder="Contoh: Ruang Presentasi A">
+            <label for="loginEmail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Alamat Email
+            </label>
+            <div class="form-control-wrap">
+              <input type="email" id="loginEmail" class="form-control" placeholder="nama@perusahaan.com" required autocomplete="username">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="loginPassword">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Kata Sandi
+            </label>
+            <div class="form-control-wrap">
+              <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary auth-submit-btn">Masuk Portal</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label for="registerName">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Nama Lengkap
+            </label>
+            <div class="form-control-wrap">
+              <input type="text" id="registerName" class="form-control" placeholder="Contoh: Budi Santoso" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="registerEmail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Alamat Email
+            </label>
+            <div class="form-control-wrap">
+              <input type="email" id="registerEmail" class="form-control" placeholder="nama@perusahaan.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="registerPhone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Nomor Telepon
+            </label>
+            <div class="form-control-wrap">
+              <input type="tel" id="registerPhone" class="form-control" placeholder="08xxxxxxxxxx" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="registerPassword">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Kata Sandi
+            </label>
+            <div class="form-control-wrap">
+              <input type="password" id="registerPassword" class="form-control" placeholder="Minimal 8 karakter" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-accent auth-submit-btn">Buat Akun Baru</button>
+        </form>
+
+        <div class="auth-footer">
+          <a href="#" class="auth-link" onclick="navigateTo('landing')">Kembali ke Beranda</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+     4. APPLICATION PORTAL VIEW (DASHBOARD)
+     ========================================================================== -->
+  <div id="dashboardPageView" class="hidden">
+    <div class="app-shell">
+      
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <a href="#" class="brand" onclick="return false;">
+            <svg class="brand-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2" fill="none"/>
+              <path d="M9 10h6m-6 4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="17" cy="17" r="2" fill="currentColor"/>
+            </svg>
+            <span>RoomBook</span>
+          </a>
+          
+          <div class="user-profile-summary">
+            <div class="user-profile-avatar" id="sidebarUserAvatar">U</div>
+            <div class="user-profile-info">
+              <p class="user-profile-name" id="sidebarUserName">Nama User</p>
+              <span class="user-profile-role" id="sidebarUserRole">Customer</span>
+            </div>
+          </div>
+
+          <!-- Navigation Links Grid -->
+          <ul class="sidebar-menu">
+            <!-- Customer Specific Tabs -->
+            <li class="customer-only">
+              <button class="sidebar-menu-btn active" id="menuBtnPesanRuangan" onclick="switchDashboardTab('pesanRuangan')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Pesan Ruangan</span>
+              </button>
+            </li>
+            <li class="customer-only">
+              <button class="sidebar-menu-btn" id="menuBtnBookingSaya" onclick="switchDashboardTab('bookingSaya')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Booking Saya</span>
+              </button>
+            </li>
+
+            <!-- Admin Specific Tabs -->
+            <li class="admin-only hidden">
+              <button class="sidebar-menu-btn active" id="menuBtnOverview" onclick="switchDashboardTab('overview')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                <span>Ringkasan</span>
+              </button>
+            </li>
+            <li class="admin-only hidden">
+              <button class="sidebar-menu-btn" id="menuBtnKelolaRuangan" onclick="switchDashboardTab('kelolaRuangan')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                <span>Kelola Ruangan</span>
+              </button>
+            </li>
+            <li class="admin-only hidden">
+              <button class="sidebar-menu-btn" id="menuBtnKelolaPengguna" onclick="switchDashboardTab('kelolaPengguna')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Kelola Pengguna</span>
+              </button>
+            </li>
+            <li class="admin-only hidden">
+              <button class="sidebar-menu-btn" id="menuBtnSemuaBooking" onclick="switchDashboardTab('semuaBooking')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Semua Booking</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+        
+        <button class="btn btn-danger btn-nav" onclick="handleLogout()" style="width: 100%;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Keluar Portal</span>
+        </button>
+      </aside>
+
+      <!-- Main Dashboard Viewport -->
+      <main class="main-viewport">
+        
+        <!-- Viewport Header -->
+        <header class="viewport-header">
+          <div>
+            <h2 id="viewportTitle">Pesan Ruangan</h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted);" id="viewportSubtitle">Pilih ruangan rapat terbaik untuk memperlancar kolaborasi.</p>
+          </div>
+          <div class="viewport-header-actions">
+            <!-- Dynamic dynamic button or date display -->
+            <div style="font-weight: 700; color: var(--primary);" id="currentDateDisplay">-- -- 2026</div>
+          </div>
+        </header>
+
+        <!-- ==========================================
+           TAB CONTENT A: PESAN RUANGAN (CUSTOMER)
+           ========================================== -->
+        <section id="tabContentPesanRuangan" class="dashboard-tab-content">
+          <div class="dashboard-grid-header">
+            <h3>Fasilitas Ruang Meeting</h3>
+          </div>
+          <div class="dashboard-rooms-grid" id="customerRoomsGrid">
+            <!-- Dynamically populated room cards -->
+          </div>
+        </section>
+
+        <!-- ==========================================
+           TAB CONTENT B: BOOKING SAYA (CUSTOMER)
+           ========================================== -->
+        <section id="tabContentBookingSaya" class="dashboard-tab-content hidden">
+          <div class="dashboard-grid-header">
+            <h3>Daftar Rapat Anda</h3>
+            <button class="btn btn-accent" onclick="openBookingFormModal()">+ Booking Ruangan</button>
+          </div>
+          
+          <div class="table-responsive-container">
+            <table class="custom-table" id="customerBookingsTable">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Ruangan</th>
+                  <th>Tanggal</th>
+                  <th>Mulai</th>
+                  <th>Selesai</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dynamically populated customer bookings -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==========================================
+           TAB CONTENT C: OVERVIEW (ADMIN)
+           ========================================== -->
+        <section id="tabContentOverview" class="dashboard-tab-content hidden">
+          <div class="metrics-row">
+            <div class="glass-box-card stat-card">
+              <div class="stat-card-header">
+                <span class="stat-card-title">Total Ruangan</span>
+                <div class="stat-card-icon blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                </div>
+              </div>
+              <p class="stat-card-val" id="metricTotalRooms">--</p>
+            </div>
+            
+            <div class="glass-box-card stat-card">
+              <div class="stat-card-header">
+                <span class="stat-card-title">Total Users</span>
+                <div class="stat-card-icon orange">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                </div>
+              </div>
+              <p class="stat-card-val" id="metricTotalUsers">--</p>
+            </div>
+
+            <div class="glass-box-card stat-card">
+              <div class="stat-card-header">
+                <span class="stat-card-title">Booking Aktif</span>
+                <div class="stat-card-icon emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+              </div>
+              <p class="stat-card-val" id="metricActiveBookings">--</p>
+            </div>
+          </div>
+
+          <div class="glass-box-card" style="padding: 28px;">
+            <h3 style="margin-bottom: 16px;">Quick Link Kelola Portal</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Selamat datang di dashboard admin. Di sini Anda memiliki otorisasi penuh untuk menyetujui, menolak booking, atau menambah user dan ruangan.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="switchDashboardTab('kelolaRuangan')">Kelola Ruangan</button>
+              <button class="btn btn-accent" onclick="switchDashboardTab('semuaBooking')">Kelola Jadwal Booking</button>
+              <button class="btn btn-secondary" onclick="switchDashboardTab('kelolaPengguna')">Kelola Pengguna</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+           TAB CONTENT D: KELOLA RUANGAN (ADMIN)
+           ========================================== -->
+        <section id="tabContentKelolaRuangan" class="dashboard-tab-content hidden">
+          <div class="dashboard-grid-header">
+            <h3>Daftar Ruangan Terdaftar</h3>
+            <button class="btn btn-primary" onclick="openRoomFormModal()">+ Tambah Ruangan</button>
+          </div>
+          
+          <div class="table-responsive-container">
+            <table class="custom-table" id="adminRoomsTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nama Ruangan</th>
+                  <th>Kapasitas (Pax)</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dynamically populated rooms list -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==========================================
+           TAB CONTENT E: KELOLA PENGGUNA (ADMIN)
+           ========================================== -->
+        <section id="tabContentKelolaPengguna" class="dashboard-tab-content hidden">
+          <div class="dashboard-grid-header">
+            <h3>Daftar Pengguna Portal</h3>
+            <button class="btn btn-primary" onclick="openUserFormModal()">+ Tambah User</button>
+          </div>
+          
+          <div class="table-responsive-container">
+            <table class="custom-table" id="adminUsersTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nama Lengkap</th>
+                  <th>Email</th>
+                  <th>Hak Akses (Role)</th>
+                  <th>Telepon</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dynamically populated users list -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==========================================
+           TAB CONTENT F: SEMUA BOOKING (ADMIN)
+           ========================================== -->
+        <section id="tabContentSemuaBooking" class="dashboard-tab-content hidden">
+          <div class="dashboard-grid-header">
+            <h3>Laporan Pemesanan Ruangan</h3>
+            <button class="btn btn-primary" onclick="openBookingFormModal(true)">+ Buat Booking Admin</button>
+          </div>
+
+          <!-- Filtering Actions -->
+          <div class="glass-box-card filters-bar" style="padding: 20px; border-radius: var(--radius-md); margin-bottom: 24px;">
+            <div class="form-group">
+              <label for="filterDate">Tanggal Pertemuan</label>
+              <div class="form-control-wrap">
+                <input type="date" id="filterDate" class="form-control" style="padding-left: 14px;">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filterRoom">Ruangan</label>
+              <div class="form-control-wrap">
+                <select id="filterRoom" class="form-control" style="padding-left: 14px;">
+                  <option value="">Semua Ruangan</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-primary" onclick="loadAdminBookings()" style="height: 48px;">Filter Jadwal</button>
+            </div>
+          </div>
+          
+          <div class="table-responsive-container">
+            <table class="custom-table" id="adminBookingsTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Ruangan</th>
+                  <th>Pemesan</th>
+                  <th>Tanggal</th>
+                  <th>Mulai</th>
+                  <th>Selesai</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dynamically populated all bookings -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+     5. MODAL POPUPS (FORMS)
+     ========================================================================== -->
+  
+  <!-- Booking Form Modal (Both Customer and Admin) -->
+  <div class="modal-overlay" id="bookingModalOverlay">
+    <div class="glass-box-card modal-content">
+      <div class="modal-header">
+        <h3 id="bookingModalTitle">Form Booking Ruangan</h3>
+        <button class="modal-close" onclick="closeBookingFormModal()">&times;</button>
+      </div>
+      <form id="bookingForm" onsubmit="handleSaveBooking(event)">
+        
+        <!-- Customer Selector (Visible only to Admin) -->
+        <div class="form-group" id="bookingCustomerField">
+          <label for="bookingCustomer">Nama Pemesan (Customer)</label>
+          <select id="bookingCustomer" class="form-control" style="padding-left: 14px;"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="bookingRoom">Pilih Ruangan</label>
+          <select id="bookingRoom" class="form-control" style="padding-left: 14px;" required></select>
+        </div>
+
+        <div class="form-group">
+          <label for="bookingDate">Tanggal Rapat</label>
+          <input type="date" id="bookingDate" class="form-control" style="padding-left: 14px;" required>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="bookingStart">Jam Mulai</label>
+            <input type="time" id="bookingStart" class="form-control" style="padding-left: 14px;" required>
           </div>
           <div class="form-group">
-            <label for="roomCapacity">Kapasitas</label>
-            <input type="number" id="roomCapacity" placeholder="Contoh: 10">
-          </div>
-          <div class="form-actions">
-            <button class="btn-primary" onclick="saveRoom()" type="button">Simpan</button>
-            <button class="btn-secondary" onclick="hideRoomForm()" type="button">Batal</button>
+            <label for="bookingEnd">Jam Selesai</label>
+            <input type="time" id="bookingEnd" class="form-control" style="padding-left: 14px;" required>
           </div>
         </div>
 
-        <table id="roomsTable" aria-label="Tabel Ruangan">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Kapasitas</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </section>
+        <div id="bookingModalMessage"></div>
 
-      <!-- Bagian daftar users -->
-      <section id="contentUsers" class="tab-content hidden" aria-label="Tab Users">
-        <div class="section-head">
-          <h2>Daftar Users</h2>
-          <button class="btn-success" onclick="showUserForm()" type="button">+ Tambah User</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeBookingFormModal()">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Room CRUD Modal (Admin Only) -->
+  <div class="modal-overlay" id="roomModalOverlay">
+    <div class="glass-box-card modal-content">
+      <div class="modal-header">
+        <h3 id="roomModalTitle">Tambah Ruangan</h3>
+        <button class="modal-close" onclick="closeRoomFormModal()">&times;</button>
+      </div>
+      <form id="roomForm" onsubmit="handleSaveRoom(event)">
+        <input type="hidden" id="roomId">
+        
+        <div class="form-group">
+          <label for="roomName">Nama Ruangan</label>
+          <input type="text" id="roomName" class="form-control" placeholder="Contoh: Ruang Anggrek" style="padding-left: 14px;" required>
         </div>
 
-        <div id="userFormContainer" class="form-card hidden">
-          <h3 id="userFormTitle">Tambah User</h3>
-          <input type="hidden" id="userId">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="userName">Nama</label>
-              <input type="text" id="userName" placeholder="Nama lengkap">
-            </div>
-            <div class="form-group">
-              <label for="userEmail">Email</label>
-              <input type="email" id="userEmail" placeholder="user@contoh.com">
-            </div>
-            <div class="form-group">
-              <label for="userPassword">Password</label>
-              <input type="password" id="userPassword" placeholder="Minimal 8 karakter">
-            </div>
-            <div class="form-group">
-              <label for="userRole">Role</label>
-              <select id="userRole">
-                <option value="customer">Customer</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="userPhone">Phone</label>
-              <input type="text" id="userPhone" placeholder="0812xxxxxxx">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn-primary" onclick="saveUser()" type="button">Simpan</button>
-            <button class="btn-secondary" onclick="hideUserForm()" type="button">Batal</button>
-          </div>
+        <div class="form-group">
+          <label for="roomCapacity">Kapasitas (Pax)</label>
+          <input type="number" id="roomCapacity" class="form-control" placeholder="Contoh: 15" style="padding-left: 14px;" required min="1">
         </div>
 
-        <table id="usersTable" aria-label="Tabel Users">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Phone</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </section>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeRoomFormModal()">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Ruangan</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-      <!-- Bagian daftar booking -->
-      <section id="contentBookings" class="tab-content hidden" aria-label="Tab Bookings">
-        <div class="section-head">
-          <h2>Semua Booking</h2>
-          <button class="btn-success" onclick="showBookingForm()" type="button">+ Buat Booking</button>
+  <!-- User CRUD Modal (Admin Only) -->
+  <div class="modal-overlay" id="userModalOverlay">
+    <div class="glass-box-card modal-content">
+      <div class="modal-header">
+        <h3 id="userModalTitle">Tambah User</h3>
+        <button class="modal-close" onclick="closeUserFormModal()">&times;</button>
+      </div>
+      <form id="userForm" onsubmit="handleSaveUser(event)">
+        <input type="hidden" id="userId">
+
+        <div class="form-group">
+          <label for="userName">Nama Lengkap</label>
+          <input type="text" id="userName" class="form-control" placeholder="Nama Lengkap" style="padding-left: 14px;" required>
         </div>
 
-        <div id="bookingFormContainer" class="form-card hidden">
-          <h3>Form Booking</h3>
-          <div class="form-grid booking-grid">
-            <div class="form-group">
-              <label for="bookingCustomer">Customer</label>
-              <select id="bookingCustomer"></select>
-            </div>
-            <div class="form-group">
-              <label for="bookingRoom">Ruangan</label>
-              <select id="bookingRoom"></select>
-            </div>
-            <div class="form-group full-width">
-              <label for="bookingDate">Tanggal</label>
-              <input type="date" id="bookingDate">
-            </div>
-            <div class="form-group">
-              <label for="bookingStart">Jam Mulai</label>
-              <input type="time" id="bookingStart">
-            </div>
-            <div class="form-group">
-              <label for="bookingEnd">Jam Selesai</label>
-              <input type="time" id="bookingEnd">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn-primary" onclick="saveBooking()" type="button">Simpan Booking</button>
-            <button class="btn-secondary" onclick="hideBookingForm()" type="button">Batal</button>
-          </div>
-          <div id="bookingMessage" class="booking-message" aria-live="polite"></div>
+        <div class="form-group">
+          <label for="userEmail">Alamat Email</label>
+          <input type="email" id="userEmail" class="form-control" placeholder="nama@email.com" style="padding-left: 14px;" required>
         </div>
 
-        <div class="filters" role="group" aria-label="Filter Booking">
+        <div class="form-group" id="userPasswordGroup">
+          <label for="userPassword">Kata Sandi</label>
+          <input type="password" id="userPassword" class="form-control" placeholder="Minimal 8 karakter" style="padding-left: 14px;">
+        </div>
+
+        <div class="form-grid">
           <div class="form-group">
-            <label for="filterDate">Tanggal</label>
-            <input type="date" id="filterDate">
-          </div>
-          <div class="form-group">
-            <label for="filterRoom">Ruangan</label>
-            <select id="filterRoom">
-              <option value="">Semua Ruangan</option>
+            <label for="userRole">Hak Akses (Role)</label>
+            <select id="userRole" class="form-control" style="padding-left: 14px;" required>
+              <option value="customer">Customer (Umum)</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
-          <div class="filter-actions">
-            <button class="btn-primary" onclick="loadBookings()" type="button">Filter</button>
+          <div class="form-group">
+            <label for="userPhone">Nomor Telepon</label>
+            <input type="tel" id="userPhone" class="form-control" placeholder="08xxxxxxxxxx" style="padding-left: 14px;">
           </div>
         </div>
 
-        <table id="bookingsTable" aria-label="Tabel Bookings">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Ruangan</th>
-              <th>Customer</th>
-              <th>Tanggal</th>
-              <th>Mulai</th>
-              <th>Selesai</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </section>
-    </section>
-  </main>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeUserFormModal()">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan User</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  <!-- Skrip admin untuk logika autentikasi dan CRUD -->
-  <script src="/js/admin.js"></script>
+
+  <!-- ==========================================================================
+     6. JAVASCRIPT IMPORTS
+     ========================================================================== -->
+  <script src="/js/app.js"></script>
 </body>
 </html>
-

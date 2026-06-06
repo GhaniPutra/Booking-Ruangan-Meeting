@@ -1,422 +1,1433 @@
-/*
-  ==============================================
-  Style UI Modern Soft 2026
-  ==============================================
-  Dokumentasi dalam CSS ditulis dalam Bahasa Indonesia.
-  Tujuan: tampilan netral, lapang, profesional, dan mudah dibaca.
-*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
-/* Reset global agar semua browser tampil seragam */
-* {
-  box-sizing: border-box; /* Menggunakan box-sizing yang konsisten */
-  margin: 0; /* Hapus margin default browser */
-  padding: 0; /* Hapus padding default browser */
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif; /* Font sistem modern */
-}
-
-/* Variabel warna dan gaya global */
+/* ==========================================================================
+   1. VARIABLES & THEMING
+   ========================================================================== */
 :root {
-  --bg: #f4f5f9; /* Warna latar halaman utama */
-  --card: rgba(255, 255, 255, 0.94); /* Warna latar card */
-  --surface: #ffffff; /* Warna permukaan solid */
-  --text: #16202b; /* Warna teks utama */
-  --muted: #6b7280; /* Warna teks sekunder */
-  --border: rgba(15, 23, 42, 0.10); /* Warna border lembut */
-  --shadow: 0 18px 50px rgba(15, 23, 42, 0.08); /* Bayangan utama */
-  --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.05); /* Bayangan lembut */
-  --radius-lg: 24px; /* Radius besar */
-  --radius-md: 18px; /* Radius sedang */
-  --radius-sm: 14px; /* Radius kecil */
-  --primary-bg: rgba(79, 70, 229, 0.12); /* Warna tombol utama */
-  --primary-text: #4338ca; /* Warna teks tombol utama */
-  --success-bg: rgba(34, 197, 94, 0.14); /* Warna tombol sukses */
-  --success-text: #166534; /* Warna teks sukses */
-  --danger-bg: rgba(239, 68, 68, 0.14); /* Warna tombol bahaya */
-  --danger-text: #b91c1c; /* Warna teks bahaya */
-  --secondary-bg: rgba(255, 255, 255, 0.78); /* Warna tombol sekunder */
-  --secondary-text: #16202b; /* Warna teks sekunder */
+  /* Default Theme: Customer (Sky Blue & Booking Orange) */
+  --primary: #1e3a8a;
+  --primary-rgb: 30, 58, 138;
+  --secondary: #3b82f6;
+  --secondary-rgb: 59, 130, 246;
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --accent-rgb: 249, 115, 22;
+  
+  --bg-color: #f0f7ff;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(59, 130, 246, 0.16);
+  --glass-shadow: 0 8px 32px 0 rgba(30, 58, 138, 0.08);
+  
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
-/* Gaya halaman utama dan background */
+/* Admin Theme Override (applied to body.theme-admin) */
+body.theme-admin {
+  --primary: #4f46e5;
+  --primary-rgb: 79, 70, 229;
+  --secondary: #06b6d4;
+  --secondary-rgb: 6, 182, 212;
+  --accent: #10b981;
+  --accent-hover: #059669;
+  --accent-rgb: 16, 185, 129;
+  
+  --bg-color: #f5f3ff;
+  --glass-border: rgba(79, 70, 229, 0.16);
+  --glass-shadow: 0 8px 32px 0 rgba(79, 70, 229, 0.08);
+}
+
+/* ==========================================================================
+   2. RESET & BASE STYLES
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  min-height: 100vh; /* Pastikan halaman memenuhi tinggi layar */
-  background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.12), transparent 34%),
-              radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.08), transparent 38%),
-              var(--bg); /* Kombinasi gradasi lembut */
-  color: var(--text); /* Warna teks utama */
-  line-height: 1.6; /* Jarak antar baris lebih nyaman */
+  font-family: 'Open Sans', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  line-height: 1.6;
 }
 
-/* Utility untuk menyembunyikan elemen */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .hidden {
-  display: none !important; /* Kelas ini digunakan oleh JS */
+  display: none !important;
 }
 
-/* Kerangka aplikasi utama */
-.app-shell {
-  width: 100%; /* Lebar penuh layar */
-  margin: 0; /* Hapus margin auto */
-  padding: 26px 20px 38px; /* Jarak dalam page */
+/* ==========================================================================
+   3. BACKGROUND ANIMATIONS (LIQUID GLASS)
+   ========================================================================== */
+.bg-decorations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-/* Panel login dan dashboard bersama */
-.auth-panel,
-.dashboard-panel {
-  width: 100%; /* Memenuhi lebar area konten */
-  background: var(--card); /* Latar card putih transparan */
-  border: 1px solid var(--border); /* Border lembut */
-  border-radius: var(--radius-lg); /* Radius tegas */
-  box-shadow: var(--shadow); /* Bayangan halus */
-  padding: 32px; /* Jarak dalam card */
+.blur-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.45;
+  animation: floatCircle 20s infinite ease-in-out alternate;
 }
 
-/* Spesifikasi panel login */
-.auth-panel {
-  margin-top: 76px; /* Jarak dari atas layar */
-  max-width: none; /* Hapus batas lebar */
+.circle-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(147, 197, 253, 0.1) 70%);
+  top: -10%;
+  left: -10%;
 }
 
-/* Bagian judul dan deskripsi login */
-.auth-top {
-  margin-bottom: 28px; /* Jarak bawah header login */
+body.theme-admin .circle-1 {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(196, 181, 253, 0.1) 70%);
 }
 
-.eyebrow {
-  margin-bottom: 10px; /* Jarak bawah label kecil */
-  font-size: 12px; /* Ukuran teks kecil */
-  letter-spacing: 0.18em; /* Spasi huruf */
-  text-transform: uppercase; /* Huruf kapital */
-  color: var(--muted); /* Warna teks sekunder */
+.circle-2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.3) 0%, rgba(253, 186, 116, 0.1) 70%);
+  bottom: -10%;
+  right: -10%;
+  animation-delay: -5s;
 }
 
-.auth-copy,
-.dashboard-copy {
-  max-width: 640px; /* Lebar optimal teks deskripsi */
-  color: var(--muted); /* Warna teks sekunder */
-  font-size: 0.98rem; /* Ukuran teks paragraf */
+body.theme-admin .circle-2 {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(110, 231, 183, 0.1) 70%);
 }
 
-/* Header dashboard */
-.dashboard-header {
-  display: flex; /* Baris fleksibel */
-  align-items: flex-start; /* Rata atas */
-  justify-content: space-between; /* Elemen berjauhan */
-  gap: 24px; /* Jarak antar elemen */
-  margin-bottom: 24px; /* Jarak bawah header */
+.circle-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(147, 197, 253, 0.05) 70%);
+  top: 50%;
+  left: 60%;
+  animation-delay: -10s;
 }
 
-.dashboard-header h1 {
-  margin-top: 2px; /* Perataan vertical */
-  font-size: 2rem; /* Ukuran judul besar */
+@keyframes floatCircle {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(80px, 50px) scale(1.15);
+  }
+  100% {
+    transform: translate(-40px, -60px) scale(0.9);
+  }
 }
 
-/* Kartu ringkasan metrik dashboard */
-.dashboard-cards {
-  display: grid; /* Grid tiga kartu */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px; /* Jarak antar kartu */
-  margin-bottom: 26px; /* Jarak bawah ringkasan */
+/* ==========================================================================
+   4. NAVIGATION BAR (FLOATING GLASS)
+   ========================================================================== */
+.navbar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 1280px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 50px;
+  padding: 12px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition-smooth);
 }
 
-.metric-card {
-  background: rgba(255, 255, 255, 0.92); /* Card putih lembut */
-  border: 1px solid rgba(15, 23, 42, 0.08); /* Border halus */
-  border-radius: var(--radius-md); /* Radius menengah */
-  padding: 20px; /* Jarak dalam kartu */
-  box-shadow: var(--shadow-soft); /* Bayangan lembut */
+.navbar.scrolled {
+  top: 8px;
+  box-shadow: 0 12px 40px 0 rgba(30, 58, 138, 0.15);
+  background: rgba(255, 255, 255, 0.85);
 }
 
-.metric-label {
-  margin-bottom: 10px; /* Jarak label ke nilai */
-  font-size: 0.82rem; /* Ukuran label */
-  font-weight: 700; /* Tebal */
-  color: var(--muted); /* Warna sekunder */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary);
 }
 
-.metric-value {
-  font-size: 2rem; /* Nilai besar */
-  font-weight: 800; /* Sangat tebal */
-  color: var(--text); /* Warna teks utama */
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
 }
 
-/* Layout judul setiap panel */
-.section-head {
-  display: flex; /* Baris fleksibel */
-  flex-wrap: wrap; /* Membungkus ketika sempit */
-  align-items: center; /* Rata tengah */
-  justify-content: space-between; /* Spasi antara judul/tombol */
-  gap: 16px; /* Jarak antar elemen */
-  margin-bottom: 16px; /* Jarak bawah */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
 }
 
-.section-head h2 {
-  margin: 0; /* Hilangkan margin default */
-  font-size: 1.1rem; /* Ukuran judul section */
+.nav-link {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: var(--transition-smooth);
 }
 
-/* Tab bar modern */
-.tab-bar {
-  display: flex; /* Baris tombol */
-  flex-wrap: wrap; /* Wrap di layar kecil */
-  gap: 12px; /* Jarak antar tab */
-  margin-bottom: 22px; /* Jarak bawah tab */
+.nav-link:hover {
+  color: var(--primary);
 }
 
-.tab-bar button {
-  appearance: none; /* Hilangkan gaya browser */
-  border: 1px solid transparent; /* Border default */
-  padding: 10px 16px; /* Padding tab */
-  border-radius: 999px; /* Pill shape */
-  background: rgba(255, 255, 255, 0.88); /* Putihan lembut */
-  color: var(--muted); /* Warna teks sekunder */
-  font-weight: 700; /* Tebal */
-  cursor: pointer; /* Kursor pointer */
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, color 120ms ease;
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.tab-bar button:hover {
-  transform: translateY(-1px); /* Hover ringan */
-  border-color: rgba(15, 23, 42, 0.10); /* Border halus */
+/* ==========================================================================
+   5. BUTTONS
+   ========================================================================== */
+button, .btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+  text-decoration: none;
 }
 
-.tab-bar button.active {
-  background: rgba(79, 70, 229, 0.14); /* Tab aktif berwarna */
-  color: var(--primary-text); /* Warna teks aktif */
-  border-color: rgba(79, 70, 229, 0.18); /* Border aktif */
+button:focus-visible, .btn:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.3);
+  outline-offset: 2px;
 }
 
-/* Styling tabel modern */
-table {
-  width: 100%; /* Lebar penuh */
-  border-collapse: separate; /* Border terpisah */
-  border-spacing: 0; /* Tanpa jarak antar sel */
-  background: rgba(255, 255, 255, 0.9); /* Backdrop putih */
-  border: 1px solid rgba(15, 23, 42, 0.08); /* Border luar */
-  border-radius: var(--radius-md); /* Radius tabel */
-  overflow: hidden; /* Round corners */
-}
-
-th,
-td {
-  padding: 14px 16px; /* Spasi dalam sel */
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06); /* Garis antar baris */
-  text-align: left; /* Rata kiri */
-  vertical-align: middle; /* Vertikal tengah */
-}
-
-th {
-  background: rgba(246, 247, 250, 0.94); /* Header lebih terang */
-  color: var(--muted); /* Warna teks header */
-  font-weight: 700; /* Tebal */
-}
-
-tbody tr:hover td {
-  background: rgba(255, 255, 255, 0.96); /* Highlight baris hover */
-}
-
-tbody tr:last-child td {
-  border-bottom: none; /* Hilangkan border di baris terakhir */
-}
-
-/* Styling tombol global */
-button {
-  border: 1px solid transparent; /* Border default */
-  border-radius: 14px; /* Radius tombol */
-  padding: 11px 16px; /* Padding tombol */
-  font-weight: 700; /* Tebal */
-  cursor: pointer; /* Kursor pointer */
-  transition: transform 120ms ease, background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
-}
-
-button:hover {
-  transform: translateY(-1px); /* Hover efek */
-}
-
-button:active {
-  transform: translateY(1px); /* Efek klik */
-}
-
-button:focus-visible {
-  outline: 4px solid rgba(79, 70, 229, 0.18); /* Outline fokus */
-  outline-offset: 2px; /* Jarak outline */
-}
-
-/* Variasi tombol khusus */
 .btn-primary {
-  background: var(--primary-bg); /* Latar utama */
-  color: var(--primary-text); /* Teks utama */
-  border-color: rgba(79, 70, 229, 0.18); /* Border tonal */
+  background-color: var(--primary);
+  color: #ffffff;
 }
 
-.btn-success {
-  background: var(--success-bg); /* Latar sukses */
-  color: var(--success-text); /* Teks sukses */
-  border-color: rgba(34, 197, 94, 0.22); /* Border sukses */
-}
-
-.btn-danger {
-  background: var(--danger-bg); /* Latar bahaya */
-  color: var(--danger-text); /* Teks bahaya */
-  border-color: rgba(239, 68, 68, 0.18); /* Border bahaya */
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
 }
 
 .btn-secondary {
-  background: var(--secondary-bg); /* Latar sekunder */
-  color: var(--secondary-text); /* Teks sekunder */
-  border-color: rgba(15, 23, 42, 0.10); /* Border sekunder */
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
 }
 
-.btn-wide {
-  width: 100%; /* Tombol full width */
-  max-width: 280px; /* Lebar maksimum */
+.btn-secondary:hover {
+  background-color: rgba(30, 58, 138, 0.05);
+  transform: translateY(-2px);
 }
 
-/* Form input modern */
+.btn-accent {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn-accent:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background-color: var(--success);
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+}
+
+.btn-nav {
+  padding: 8px 18px;
+  border-radius: 30px;
+}
+
+.btn-nav-login {
+  color: var(--primary);
+  background: transparent;
+}
+
+.btn-nav-login:hover {
+  background: rgba(30, 58, 138, 0.05);
+}
+
+.btn-nav-register {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.btn-nav-register:hover {
+  background: #172554;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+}
+
+/* ==========================================================================
+   6. LANDING PAGE SECTIONS
+   ========================================================================== */
+.landing-section {
+  padding: 120px 20px 80px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.hero-content {
+  flex: 1.2;
+  max-width: 650px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: var(--secondary);
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: var(--primary);
+}
+
+.hero-content h1 span {
+  background: linear-gradient(135deg, var(--primary) 30%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.hero-visual {
+  flex: 0.8;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glass-box-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-mockup-card {
+  width: 100%;
+  max-width: 420px;
+  transform: rotate(-3deg);
+  transition: var(--transition-smooth);
+}
+
+.hero-mockup-card:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.mock-stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.08);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.mock-stat:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.mock-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.mock-val {
+  font-weight: 700;
+  color: var(--primary);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Feature Section */
+.section-title-wrap {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-subtitle {
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  color: var(--primary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.feature-card {
+  padding: 36px;
+  transition: var(--transition-smooth);
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 12px 40px rgba(30, 58, 138, 0.12);
+}
+
+.feature-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  background: rgba(59, 130, 246, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  color: var(--secondary);
+}
+
+.feature-icon-wrapper svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--secondary);
+  stroke-width: 2;
+  fill: none;
+}
+
+.feature-card h3 {
+  margin-bottom: 12px;
+  font-size: 1.25rem;
+}
+
+.feature-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Rooms Preview Section */
+.rooms-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.room-preview-card {
+  padding: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.room-preview-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(30, 58, 138, 0.12);
+}
+
+.room-preview-image {
+  height: 200px;
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  position: relative;
+}
+
+.room-preview-image svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.7;
+}
+
+.room-preview-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--primary);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.room-preview-info {
+  padding: 24px;
+}
+
+.room-preview-info h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.room-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.room-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.room-meta-item svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--secondary);
+}
+
+.room-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.amenity-tag {
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(59, 130, 246, 0.06);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Steps/Workflow Section */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.step-card {
+  padding: 36px;
+  position: relative;
+  transition: var(--transition-smooth);
+}
+
+.step-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 12px 40px rgba(30, 58, 138, 0.12);
+}
+
+.step-number {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.step-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.step-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   7. REDESIGNED AUTH PAGE (LOGIN & REGISTER)
+   ========================================================================== */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 460px;
+  padding: 40px;
+}
+
+.auth-header-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header-logo .brand {
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Auth tabs slider style */
+.auth-tabs {
+  display: flex;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-radius: 30px;
+  padding: 4px;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.auth-tab-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px;
+  border-radius: 26px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.auth-tab-btn.active {
+  color: #ffffff;
+  background: var(--primary);
+  box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2);
+}
+
+/* Form Styles */
 .form-group {
-  margin-bottom: 18px; /* Jarak antar field */
+  margin-bottom: 20px;
 }
 
 .form-group label {
-  display: block; /* Label satu baris */
-  margin-bottom: 8px; /* Jarak ke input */
-  color: var(--muted); /* Warna label */
-  font-size: 0.9rem; /* Ukuran label */
-  font-weight: 700; /* Tebal */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
 }
 
-.form-group input,
-.form-group select {
-  width: 100%; /* Penuhi lebar */
-  padding: 14px 16px; /* Padding dalam */
-  border-radius: 16px; /* Radius input */
-  border: 1px solid rgba(15, 23, 42, 0.12); /* Border input */
-  background: rgba(255, 255, 255, 0.96); /* Latar putih */
-  color: var(--text); /* Teks input */
-  font-size: 0.96rem; /* Ukuran teks */
-  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+.form-group label svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--secondary);
 }
 
-.form-group input::placeholder {
-  color: rgba(107, 114, 128, 0.7); /* Placeholder lembut */
+.form-control-wrap {
+  position: relative;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-  outline: none; /* Hilangkan outline browser */
-  border-color: rgba(79, 70, 229, 0.28); /* Border fokus */
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12); /* Shadow fokus */
-  background: #ffffff; /* Latar fokus lebih cerah */
+.form-control {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-main);
+  transition: var(--transition-smooth);
 }
 
-/* Pesan status error & success */
-.message {
-  padding: 14px 16px; /* Padding pesan */
-  border-radius: 16px; /* Radius pesan */
-  border: 1px solid rgba(15, 23, 42, 0.10); /* Border pesan */
-  margin-top: 12px; /* Jarak atas */
-  font-weight: 700; /* Teks tebal */
+.form-control:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  background: #ffffff;
 }
 
-.error {
-  background: rgba(239, 68, 68, 0.12); /* Latar error */
-  color: #991b1b; /* Teks error */
-  border-color: rgba(239, 68, 68, 0.22); /* Border error */
+.form-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+  stroke-width: 2;
 }
 
-.success {
-  background: rgba(34, 197, 94, 0.14); /* Latar sukses */
-  color: #166534; /* Teks sukses */
-  border-color: rgba(34, 197, 94, 0.22); /* Border sukses */
+.form-control:focus + .form-input-icon {
+  color: var(--secondary);
 }
 
-/* Card form inline */
-.form-card {
-  background: var(--surface); /* Latar white */
-  border: 1px solid rgba(15, 23, 42, 0.08); /* Border card */
-  border-radius: var(--radius-md); /* Radius card */
-  padding: 24px; /* Padding card */
-  box-shadow: var(--shadow-soft); /* Bayangan lembut */
-  margin-bottom: 20px; /* Jarak bawah card */
+.auth-submit-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin-top: 10px;
 }
 
-.form-card h3 {
-  margin-top: 0; /* Hilangkan margin atas judul */
-  margin-bottom: 18px; /* Jarak judul ke konten */
+.auth-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.85rem;
 }
 
-.form-actions {
-  display: flex; /* Layout horizontal */
-  flex-wrap: wrap; /* Wrap jika sempit */
-  gap: 12px; /* Jarak antar tombol */
-  margin-top: 8px; /* Jarak atas */
+.auth-link {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 700;
 }
 
-.filters {
-  display: grid; /* Grid filter */
-  grid-template-columns: repeat(3, minmax(200px, 1fr));
-  gap: 16px; /* Jarak antar field */
-  margin: 20px 0 14px; /* Jarak vertikal */
+.auth-link:hover {
+  text-decoration: underline;
 }
 
-.filter-actions {
-  display: flex; /* Flex untuk tombol filter */
-  align-items: flex-end; /* Rata bawah */
-  justify-content: flex-end; /* Tepi kanan */
+/* Alert Notification Container */
+.alert-box {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.booking-grid {
-  display: grid; /* Grid booking form */
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px; /* Jarak antar field */
+.alert-box svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
-.full-width {
-  grid-column: 1 / -1; /* Elemen lebar penuh */
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #b91c1c;
 }
 
-.booking-message {
-  margin-top: 18px; /* Jarak pesan */
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #065f46;
 }
 
-/* Responsif untuk tablet */
-@media (max-width: 960px) {
-  .dashboard-cards,
-  .filters,
-  .booking-grid {
-    grid-template-columns: 1fr; /* Satu kolom */
+/* ==========================================================================
+   8. MAIN APPLICATION SHELL (DASHBOARD)
+   ========================================================================== */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar navigation */
+.sidebar {
+  width: 280px;
+  background: var(--glass-bg);
+  border-right: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition-smooth);
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.user-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  border-radius: var(--radius-md);
+  margin-top: -10px;
+}
+
+.user-profile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.user-profile-info {
+  overflow: hidden;
+}
+
+.user-profile-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-profile-role {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.user-profile-role.role-customer {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--secondary);
+}
+
+.user-profile-role.role-admin {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent);
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+}
+
+.sidebar-menu-btn {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.sidebar-menu-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text-muted);
+  stroke-width: 2;
+  transition: var(--transition-smooth);
+}
+
+.sidebar-menu-btn:hover {
+  background: rgba(59, 130, 246, 0.06);
+  color: var(--primary);
+}
+
+.sidebar-menu-btn:hover svg {
+  stroke: var(--primary);
+}
+
+.sidebar-menu-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.sidebar-menu-btn.active svg {
+  stroke: #ffffff;
+}
+
+/* Main Content Area */
+.main-viewport {
+  flex: 1;
+  margin-left: 280px;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.viewport-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.viewport-header h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.viewport-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   9. METRIC CARDS (DASHBOARD)
+   ========================================================================== */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  padding: 24px;
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stat-card-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.stat-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card-icon.blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--secondary);
+}
+
+.stat-card-icon.orange {
+  background: rgba(249, 115, 22, 0.1);
+  color: var(--accent);
+}
+
+.stat-card-icon.emerald {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.stat-card-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+.stat-card-val {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================================================
+   10. TABLES
+   ========================================================================== */
+.table-responsive-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.custom-table th {
+  background: rgba(241, 245, 249, 0.8);
+  padding: 16px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--primary);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.custom-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.06);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.custom-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.custom-table tbody tr:hover td {
+  background: rgba(59, 130, 246, 0.04);
+}
+
+/* Badges for Status */
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-pending {
+  background: rgba(249, 115, 22, 0.12);
+  color: var(--accent);
+}
+
+.badge-approved {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.badge-rejected {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--danger);
+}
+
+/* Actions in tables */
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+}
+
+.btn-icon:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--primary);
+}
+
+.btn-icon-danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.btn-icon-success:hover {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.btn-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
+
+/* ==========================================================================
+   11. DYNAMIC GRID LISTS
+   ========================================================================== */
+.dashboard-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.dashboard-rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.room-dashboard-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Filters Row */
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.filters-bar .form-group {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ==========================================================================
+   12. GLASS FORM CARDS (MODALS)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modal-close:hover {
+  color: var(--primary);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-grid-full {
+  grid-column: 1 / span 2;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ==========================================================================
+   13. RESPONSIVE DESIGN
+   ========================================================================== */
+/* Large screens (up to 1280px) */
+@media (max-width: 1280px) {
+  .hero-content h1 {
+    font-size: 3rem;
   }
 }
 
-/* Responsif untuk mobile */
-@media (max-width: 640px) {
-  .app-shell {
-    padding: 18px 14px 24px; /* Kurangi padding */
+/* Tablets (up to 1024px) */
+@media (max-width: 1024px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 140px;
+    justify-content: center;
   }
-
-  .auth-panel,
-  .dashboard-panel {
-    padding: 24px; /* Kurangi padding card */
+  
+  .hero-badge, .hero-actions {
+    justify-content: center;
   }
-
-  .dashboard-header {
-    flex-direction: column; /* Header kolom */
-    align-items: stretch; /* Lebar penuh */
+  
+  .hero-content {
+    max-width: 100%;
   }
-
-  .tab-bar,
-  .section-head,
-  .form-actions {
-    flex-direction: column; /* Kolom di layar kecil */
-    align-items: stretch; /* Penuhi lebar */
+  
+  .hero-visual {
+    margin-top: 40px;
   }
-
-  button {
-    width: 100%; /* Tombol full width */
+  
+  .navbar {
+    padding: 10px 20px;
   }
-
-  table {
-    font-size: 0.94rem; /* Ukuran teks lebih kecil */
+  
+  .nav-menu {
+    display: none; /* Mobile navigation toggle can be added, or keep simple links */
+  }
+  
+  /* Dashboard specific responsive */
+  .sidebar {
+    width: 80px;
+    padding: 24px 12px;
+    align-items: center;
+  }
+  
+  .sidebar .brand span,
+  .sidebar .user-profile-info,
+  .sidebar-menu-btn span {
+    display: none;
+  }
+  
+  .sidebar-menu-btn {
+    justify-content: center;
+    padding: 14px;
+  }
+  
+  .user-profile-summary {
+    padding: 8px;
+    justify-content: center;
+  }
+  
+  .main-viewport {
+    margin-left: 80px;
+    padding: 24px;
   }
 }
 
-
+/* Mobile Screens (up to 768px) */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.25rem;
+  }
+  
+  .hero-description {
+    font-size: 0.95rem;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .auth-container {
+    padding: 24px;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-grid-full {
+    grid-column: span 1;
+  }
+  
+  /* Table Stack on Mobile */
+  .custom-table th {
+    display: none;
+  }
+  
+  .custom-table, .custom-table tbody, .custom-table tr, .custom-table td {
+    display: block;
+    width: 100%;
+  }
+  
+  .custom-table tr {
+    border-bottom: 2px solid var(--glass-border);
+    padding: 12px 8px;
+    position: relative;
+  }
+  
+  .custom-table td {
+    border-bottom: none;
+    padding: 8px 12px;
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .custom-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--primary);
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+  }
+  
+  .custom-table td .table-actions {
+    justify-content: flex-end;
+    width: 100%;
+  }
+}

@@ -15,9 +15,8 @@ app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/me', require('./routes/me'));
 
-app.get('/', (req, res) => {
-  res.send('API Meeting Room Booking berjalan');
-});
+// express.static('public') will serve index.html at '/' automatically
+
 
 app.listen(PORT, () => {
   console.log(`Server berjalan di http://localhost:${PORT}`);
