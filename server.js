@@ -18,7 +18,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/me', require('./routes/me'));
 
 // If the request is not for /api, serve the SPA entry point
-app.get('*', (req, res) => {
+app.use((req, res) => {
   if (req.originalUrl.startsWith('/api/')) {
     return res.status(404).json({ error: 'Not found' });
   }
