@@ -1,88 +1,70 @@
 // migrate.js
 require('dotenv').config();
-const mysql = require('mysql2/promise');
+const { Client } = require('pg');
 
 async function migrate() {
-  const connection = await mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-  });
+  const client = new Client({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+  await client.connect();
 
-  await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``);
-  console.log(`Database '${process.env.DB_NAME}' siap.`);
+  console.log('Koneksi ke PostgreSQL berhasil.');
 
-  await connection.query(`USE \`${process.env.DB_NAME}\``);
-
-  await connection.query(`DROP TABLE IF EXISTS bookings, rooms, users`);
+  // Hapus tabel lama (urutan penting karena FK)
+  await client.query(`DROP TABLE IF EXISTS bookings, rooms, users`);
   console.log('Tabel lama dibersihkan.');
 
   // Buat tabel users
-  await connection.query(`
+  await client.query(`
     CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(100) NOT NULL,
-      email VARCHAR(100) UNIQUE NOT NULL,
-      password VARCHAR(255) NOT NULL,
-      role ENUM('admin', 'customer') NOT NULL DEFAULT 'customer',
-      phone VARCHAR(20),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      id        SERIAL PRIMARY KEY,
+      name      VARCHAR(100) NOT NULL,
+      email     VARCHAR(100) UNIQUE NOT NULL,
+      password  VARCHAR(255) NOT NULL,
+      role      VARCHAR(10)  NOT NULL DEFAULT 'customer' CHECK (role IN ('admin', 'customer')),
+      phone     VARCHAR(20),
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
   console.log('Tabel users siap.');
 
   // Buat tabel rooms
-  await connection.query(`
+  await client.query(`
     CREATE TABLE IF NOT EXISTS rooms (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(100) NOT NULL,
-      capacity INT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      id        SERIAL PRIMARY KEY,
+      name      VARCHAR(100) NOT NULL,
+      capacity  INT NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
   console.log('Tabel rooms siap.');
 
   // Buat tabel bookings
-  await connection.query(`
+  await client.query(`
     CREATE TABLE IF NOT EXISTS bookings (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      room_id INT NOT NULL,
-      user_id INT NOT NULL,
-      date DATE NOT NULL,
+      id         SERIAL PRIMARY KEY,
+      room_id    INT NOT NULL,
+      user_id    INT NOT NULL,
+      date       DATE NOT NULL,
       start_time TIME NOT NULL,
-      end_time TIME NOT NULL,
-      status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      end_time   TIME NOT NULL,
+      status     VARCHAR(10) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW(),
       FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )
   `);
   console.log('Tabel bookings siap.');
 
-  // --- Buat index dengan pengecekan manual ---
-  const [existingIndexes] = await connection.query(`
-    SHOW INDEX FROM bookings WHERE Key_name IN ('idx_booking_room_date', 'idx_booking_user')
-  `);
-  const indexNames = existingIndexes.map(row => row.Key_name);
+  // Buat index
+  await client.query(`CREATE INDEX IF NOT EXISTS idx_booking_room_date ON bookings (room_id, date)`);
+  console.log('Index idx_booking_room_date siap.');
 
-  if (!indexNames.includes('idx_booking_room_date')) {
-    await connection.query(`CREATE INDEX idx_booking_room_date ON bookings (room_id, date)`);
-    console.log('Index idx_booking_room_date dibuat.');
-  } else {
-    console.log('Index idx_booking_room_date sudah ada.');
-  }
+  await client.query(`CREATE INDEX IF NOT EXISTS idx_booking_user ON bookings (user_id)`);
+  console.log('Index idx_booking_user siap.');
 
-  if (!indexNames.includes('idx_booking_user')) {
-    await connection.query(`CREATE INDEX idx_booking_user ON bookings (user_id)`);
-    console.log('Index idx_booking_user dibuat.');
-  } else {
-    console.log('Index idx_booking_user sudah ada.');
-  }
-
-  await connection.end();
+  await client.end();
   console.log('✅ Migrasi selesai!');
 }
 
