@@ -69,25 +69,73 @@ Default credentials (yang dibuat oleh seeder):
 - Admin: admin@booking.com / admin123
 - Customer: budi@email.com / customer123
 
-## Menjalankan aplikasi
+## Menjalankan Aplikasi
 
-Di environment production:
+Aplikasi ini terdiri dari dua bagian yang harus dijalankan bersamaan: **Backend API** dan **Frontend Web (React + Vite)**.
 
-```bash
-npm start
-```
+### 1. Jalankan Backend API
+1. Pastikan dependensi sudah terinstal di root folder:
+   ```bash
+   npm install
+   ```
+2. Jalankan migrasi dan seeder database untuk memperbarui skema (termasuk kolom status baru):
+   ```bash
+   npm run migrate
+   npm run seed
+   ```
+3. Mulai server backend:
+   - **Mode Pengembangan (auto-reload):**
+     ```bash
+     npm run dev
+     ```
+   - **Mode Production:**
+     ```bash
+     npm start
+     ```
+   *Backend akan berjalan di: `http://localhost:3000`*
 
-Di mode pengembangan (auto-reload):
+### 2. Jalankan Frontend Web (React + Vite)
+1. Masuk ke folder frontend:
+   ```bash
+   cd booking-ruangan-web
+   ```
+2. Instal dependensi frontend:
+   ```bash
+   npm install
+   ```
+3. Jalankan server pengembangan frontend:
+   ```bash
+   npm run dev
+   ```
+   *Frontend akan berjalan di: `http://localhost:5173` (atau port lain yang tertera di terminal)*
 
-```bash
-npm run dev
-```
+---
 
-Buka browser ke `http://localhost:3000` (atau `http://localhost:<PORT>` jika Anda mengubah `PORT`).
+## 🚀 Pembaruan Terbaru (Recent Updates)
 
-API endpoint utama:
-- `GET /` — health check
-- Route API ada di folder `routes/` (mis. `/api/rooms`, `/api/bookings`, `/api/users`, `/api/auth`, `/api/me`).
+Kami baru saja melakukan perombakan besar untuk meningkatkan UI/UX serta menambahkan pemisahan hak akses (Role-Based Access Control):
+
+### 1. Skema Database & Seeder Baru
+*   Menambahkan kolom `status` (`ENUM('pending', 'approved', 'rejected')`) pada tabel `bookings`. Status default saat membuat booking baru adalah `'pending'`.
+*   Data contoh di `seed.js` telah disesuaikan dengan tanggal hari ini (`2026-06-06`) untuk memudahkan simulasi dashboard.
+
+### 2. Pemisahan Role (Admin & Customer)
+Sistem sekarang memiliki batasan akses yang jelas di frontend maupun backend:
+*   **Customer Role:**
+    *   **Dashboard Personal:** Menampilkan ruangan yang sedang mereka gunakan hari ini (*Ruangan Kamu Hari Ini*) dan daftar ruangan kosong yang siap dipesan hari ini (*Ruangan Kosong Hari Ini*).
+    *   **Booking Page:** Hanya dapat melihat daftar pemesanan milik sendiri (`GET /bookings?my_bookings=true`), membuat pemesanan baru, serta membatalkan (Hapus) pemesanan jika statusnya masih `PENDING`.
+    *   *Akses Dibatasi:* Tidak dapat mengelola user lain atau memodifikasi data ruangan.
+*   **Admin Role:**
+    *   **Dashboard Admin:** Menampilkan metrik sistem (Total Ruangan, Booking Hari Ini, Booking Pending, Total User) serta daftar antrean persetujuan booking.
+    *   **Fitur Approve/Reject:** Admin dapat menyetujui (`approved`) atau menolak (`rejected`) booking yang diajukan customer langsung dari dashboard atau list booking.
+    *   **Manajemen Ruangan (Rooms CRUD):** Admin dapat menambah, mengubah (Edit), dan menghapus ruangan langsung menggunakan dialog modal modern di halaman Ruangan.
+    *   **Manajemen Pengguna (Users CRUD):** Ditambahkan halaman khusus `/users` bagi Admin untuk mengelola akun pengguna (Tambah, Edit detail/role, Hapus).
+
+### 3. Perbaikan UI/UX
+*   Mengimplementasikan tema modern **Dark Glassmorphism** (efek blur latar belakang, gradasi warna ungu-biru HSL yang premium, dan hover micro-animations).
+*   Memperbaiki bug tampilan waktu (mencegah pesan error `Invalid Date` karena database memisah tipe data DATE dan TIME).
+
+---
 
 ## Catatan penting
 - Pastikan MySQL menerima koneksi dari host yang Anda pakai (`localhost`/remote). Jika menggunakan user tanpa hak `CREATE DATABASE`, buat database manual dan set `DB_NAME` sesuai.
@@ -100,11 +148,14 @@ API endpoint utama:
 - Migrasi gagal karena hak akses: buat database manual atau gunakan user dengan hak yang sesuai.
 
 ## Struktur singkat repo
-- `server.js` — entry point aplikasi
+- `server.js` — entry point aplikasi backend
 - `migrate.js` — script migrasi DB (`npm run migrate`)
 - `seed.js` — script seeder (`npm run seed`)
-- `routes/`, `controllers/`, `models/` — logika aplikasi
-- `public/` — aset frontend statis
+- `routes/`, `controllers/`, `models/` — logika aplikasi backend
+- `booking-ruangan-web/` — folder aplikasi frontend (React + Vite)
+  - `src/pages/` — Halaman frontend (Dashboard, Rooms, Bookings, Users, Profile, Login, Register)
+  - `src/components/` — Komponen pendukung (Layout, Sidebar, ProtectedRoute)
+  - `src/api/axios.js` — Konfigurasi Axios API client (base URL: `http://localhost:3000/api`)
 
 ---
 
