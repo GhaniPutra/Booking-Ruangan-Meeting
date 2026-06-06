@@ -9,6 +9,8 @@ let currentDashboardTab = ''; // e.g., 'pesanRuangan', 'bookingSaya' or 'overvie
 // Initial load check
 document.addEventListener('DOMContentLoaded', () => {
   setupNavbarScroll();
+  setupMobileNav();
+  setupScrollReveal();
   displayCurrentDate();
   
   if (token && currentUser) {
@@ -18,6 +20,66 @@ document.addEventListener('DOMContentLoaded', () => {
     navigateTo('landing');
   }
 });
+
+// Scroll reveal via IntersectionObserver
+function setupScrollReveal() {
+  const revealEls = document.querySelectorAll('.glass-box-card, .section-title-wrap, .hero-badge, .hero-content h1, .hero-description, .hero-actions, .hero-visual');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => {
+    if (!el.classList.contains('reveal')) {
+      el.classList.add('reveal');
+    }
+    obs.observe(el);
+  });
+}
+
+
+function setupMobileNav() {
+  const navToggle = document.getElementById('mobileNavToggle');
+  const navbar = document.getElementById('floatingNavbar');
+  const navLinks = document.querySelectorAll('.nav-menu a');
+  const authButtons = document.querySelectorAll('.nav-buttons .btn');
+
+  if (!navToggle || !navbar) return;
+
+  navToggle.addEventListener('click', () => {
+    const isOpen = navbar.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (navbar.classList.contains('nav-open')) {
+        navbar.classList.remove('nav-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  authButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      if (navbar.classList.contains('nav-open')) {
+        navbar.classList.remove('nav-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024 && navbar.classList.contains('nav-open')) {
+      navbar.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
 
 // Display date in dashboard header
 function displayCurrentDate() {
@@ -259,6 +321,9 @@ function switchDashboardTab(tabName) {
   // Update Active tab styling on sidebar buttons
   document.querySelectorAll('.sidebar-menu-btn').forEach(btn => btn.classList.remove('active'));
   
+  // Update Active tab styling on mobile bottom nav buttons
+  document.querySelectorAll('.mobile-bottom-nav-btn').forEach(btn => btn.classList.remove('active'));
+
   // Hide all tab contents
   document.querySelectorAll('.dashboard-tab-content').forEach(tab => tab.classList.add('hidden'));
   
@@ -268,6 +333,8 @@ function switchDashboardTab(tabName) {
   
   if (tabName === 'pesanRuangan') {
     document.getElementById('menuBtnPesanRuangan').classList.add('active');
+    const mobileBtn = document.getElementById('mobileMenuBtnPesanRuangan');
+    if (mobileBtn) mobileBtn.classList.add('active');
     document.getElementById('tabContentPesanRuangan').classList.remove('hidden');
     titleEl.textContent = 'Pesan Ruangan';
     subtitleEl.textContent = 'Pilih dan lakukan booking pada ruangan rapat premium yang tersedia.';
@@ -275,6 +342,8 @@ function switchDashboardTab(tabName) {
   } 
   else if (tabName === 'bookingSaya') {
     document.getElementById('menuBtnBookingSaya').classList.add('active');
+    const mobileBtn = document.getElementById('mobileMenuBtnBookingSaya');
+    if (mobileBtn) mobileBtn.classList.add('active');
     document.getElementById('tabContentBookingSaya').classList.remove('hidden');
     titleEl.textContent = 'Booking Saya';
     subtitleEl.textContent = 'Lacak status reservasi dan jadwal pertemuan yang telah Anda daftarkan.';
@@ -282,6 +351,8 @@ function switchDashboardTab(tabName) {
   } 
   else if (tabName === 'overview') {
     document.getElementById('menuBtnOverview').classList.add('active');
+    const mobileBtn = document.getElementById('mobileMenuBtnOverview');
+    if (mobileBtn) mobileBtn.classList.add('active');
     document.getElementById('tabContentOverview').classList.remove('hidden');
     titleEl.textContent = 'Ringkasan';
     subtitleEl.textContent = 'Monitor aktivitas penggunaan ruangan dan portal.';
@@ -289,6 +360,8 @@ function switchDashboardTab(tabName) {
   } 
   else if (tabName === 'kelolaRuangan') {
     document.getElementById('menuBtnKelolaRuangan').classList.add('active');
+    const mobileBtn = document.getElementById('mobileMenuBtnKelolaRuangan');
+    if (mobileBtn) mobileBtn.classList.add('active');
     document.getElementById('tabContentKelolaRuangan').classList.remove('hidden');
     titleEl.textContent = 'Kelola Ruangan';
     subtitleEl.textContent = 'Tambah, ubah, atau hapus meeting room dari inventaris sistem.';
@@ -296,6 +369,8 @@ function switchDashboardTab(tabName) {
   } 
   else if (tabName === 'kelolaPengguna') {
     document.getElementById('menuBtnKelolaPengguna').classList.add('active');
+    const mobileBtn = document.getElementById('mobileMenuBtnKelolaPengguna');
+    if (mobileBtn) mobileBtn.classList.add('active');
     document.getElementById('tabContentKelolaPengguna').classList.remove('hidden');
     titleEl.textContent = 'Kelola Pengguna';
     subtitleEl.textContent = 'Administrasi data user umum (customer) dan administrator.';
@@ -303,6 +378,8 @@ function switchDashboardTab(tabName) {
   } 
   else if (tabName === 'semuaBooking') {
     document.getElementById('menuBtnSemuaBooking').classList.add('active');
+    const mobileBtn = document.getElementById('mobileMenuBtnSemuaBooking');
+    if (mobileBtn) mobileBtn.classList.add('active');
     document.getElementById('tabContentSemuaBooking').classList.remove('hidden');
     titleEl.textContent = 'Semua Booking';
     subtitleEl.textContent = 'Tinjau, setujui, tolak, atau buat jadwal booking di seluruh ruangan.';
@@ -313,6 +390,7 @@ function switchDashboardTab(tabName) {
     loadAdminBookings();
   }
 }
+
 
 // ==========================================================================
 // 5. CUSTOMER PORTAL ACTION HANDLERS
