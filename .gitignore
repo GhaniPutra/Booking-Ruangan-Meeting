@@ -1,2 +1,4 @@
 .agent/
 .env
+.vercel
+.env*
