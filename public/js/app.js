@@ -422,24 +422,54 @@ async function loadCustomerRooms() {
         ];
         const selectedGradient = gradientStyles[idx % gradientStyles.length];
         
+        // Match room name to static images & amenities
+        const roomNameLower = r.name.toLowerCase();
+        let roomImg = '';
+        let fallbackIconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
+
+        if (roomNameLower.includes('anggrek')) {
+          roomImg = '/images/room_anggrek.png';
+        } else if (roomNameLower.includes('mawar')) {
+          roomImg = '/images/room_mawar.png';
+          fallbackIconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+        } else if (roomNameLower.includes('melati')) {
+          roomImg = '/images/room_melati.png';
+        } else if (roomNameLower.includes('aula') || roomNameLower.includes('serbaguna')) {
+          roomImg = '/images/aula_serbaguna.png';
+          fallbackIconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
+        } else if (roomNameLower.includes('kenanga')) {
+          roomImg = '/images/room_kenanga.png';
+        } else {
+          // general default fallback logic based on capacity
+          if (r.capacity >= 30) {
+            fallbackIconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>';
+          } else if (r.capacity >= 15) {
+            fallbackIconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+          }
+        }
+        
         return `
-          <div class="glass-box-card room-preview-card room-dashboard-card">
+          <div class="glass-box-card room-preview-card room-dashboard-card" onclick="openBookingFormModal(false, ${r.id})">
             <div>
               <div class="room-preview-image" style="background: ${selectedGradient}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                ${roomImg ? `<img src="${roomImg}" alt="${escapeHtml(r.name)}" class="room-img" onerror="this.style.opacity='0'">` : ''}
+                <div class="room-image-fallback-icon">
+                  ${fallbackIconSvg}
+                </div>
                 <span class="room-preview-badge">Kapasitas ${r.capacity} Pax</span>
               </div>
               <div class="room-preview-info">
-                <h3 style="margin-bottom: 12px;">${escapeHtml(r.name)}</h3>
-                <div class="room-amenities">
-                  <span class="amenity-tag">Ultra High-Speed Wifi</span>
-                  <span class="amenity-tag">AC</span>
-                  <span class="amenity-tag">Smart TV/Projector</span>
+                <h3>${escapeHtml(r.name)}</h3>
+                <div class="room-meta">
+                  <div class="room-meta-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Kapasitas <strong>${r.capacity} Pax</strong></span>
+                  </div>
                 </div>
               </div>
             </div>
             <div style="padding: 0 24px 24px;">
-              <button class="btn btn-accent" style="width: 100%;" onclick="openBookingFormModal(false, ${r.id})">Booking Ruangan</button>
+              <button class="btn btn-accent" style="width: 100%;" onclick="openBookingFormModal(false, ${r.id}); event.stopPropagation();">Booking Ruangan</button>
             </div>
           </div>`;
       }).join('');
