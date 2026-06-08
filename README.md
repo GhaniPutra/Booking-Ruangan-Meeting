@@ -2,6 +2,13 @@
 
 > Panduan cepat untuk meng-clone, menginstal dependensi, menjalankan migrasi database, dan menjalankan aplikasi ini.
 
+## Kelompok
+- Miftakhul Syauqi (5230411166)
+- Aninditya Wijaya (523041171)
+- Wirasakti Samudra (5230411193)
+- Mohamad Faiz Ferriantoro (5230411210)
+- Akmal Ghani Wijaya Putra (5230411217)
+
 ## Prasyarat
 - Node.js v16+ (disarankan v18 atau lebih baru)
 - MySQL server berjalan dan akun pengguna yang memiliki hak membuat database
